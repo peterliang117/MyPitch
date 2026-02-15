@@ -64,7 +64,6 @@ type ImportAnalyzeResponse = {
   output?: string;
 };
 
-const pages: Page[] = ["Home", "Test Live", "Result", "Song Library", "Recommendations"];
 const SELECTED_DEVICE_KEY = "selected_input_device_id";
 const CONFIDENCE_THRESHOLD = 0.12;
 const CONFIDENCE_PASS_THRESHOLD = 0.55;
@@ -101,30 +100,17 @@ function median(values: number[]): number {
   return sorted[mid];
 }
 
-function stageLabel(stage: TestStage): string {
-  switch (stage) {
-    case "capture_low":
-      return "Capture Low Note";
-    case "capture_high":
-      return "Capture High Note";
-    case "done":
-      return "Completed";
-    default:
-      return "Not Started";
-  }
-}
-
 function fitBucket(score: number): { label: string; className: string } {
   if (score >= 90) {
-    return { label: "Great Fit", className: "fit-great" };
+    return { label: "Great Fit", className: "great" };
   }
   if (score >= 75) {
-    return { label: "Singable", className: "fit-good" };
+    return { label: "Singable", className: "singable" };
   }
   if (score >= 60) {
-    return { label: "Challenging", className: "fit-mid" };
+    return { label: "Challenging", className: "challenging" };
   }
-  return { label: "Not Recommended", className: "fit-low" };
+  return { label: "Not Recommended", className: "low" };
 }
 
 function buildFitReasons(song: SongRecommendation): string[] {
@@ -154,6 +140,70 @@ function buildFitReasons(song: SongRecommendation): string[] {
   return reasons.slice(0, 3);
 }
 
+function getVoiceType(lowMidi: number, highMidi: number): { name: string; description: string } {
+  const range = highMidi - lowMidi;
+  const center = (lowMidi + highMidi) / 2;
+  if (center >= 60) {
+    return { name: "Soprano Range", description: `Your range spans ${Math.round(range)} semitones in the upper register, typical of a soprano voice.` };
+  }
+  if (center >= 55) {
+    return { name: "Mezzo-Soprano Range", description: `Your range spans ${Math.round(range)} semitones, sitting between soprano and alto registers.` };
+  }
+  if (center >= 50) {
+    return { name: "Alto / Countertenor Range", description: `Your range spans ${Math.round(range)} semitones in the mid-upper register.` };
+  }
+  if (center >= 45) {
+    return { name: "Tenor Range", description: `Your range spans ${Math.round(range)} semitones, comfortable in the tenor register.` };
+  }
+  if (center >= 40) {
+    return { name: "Baritone Range", description: `Your range spans ${Math.round(range)} semitones, comfortable in the mid-low register.` };
+  }
+  return { name: "Bass Range", description: `Your range spans ${Math.round(range)} semitones in the lower register.` };
+}
+
+// SVG icon components
+const MicIcon = () => (
+  <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+);
+
+const HomeIcon = () => (
+  <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+);
+
+const WaveIcon = () => (
+  <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+);
+
+const MusicIcon = () => (
+  <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+);
+
+const StarIcon = () => (
+  <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+);
+
+const UploadIcon = () => (
+  <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+);
+
+const PlayIcon = () => (
+  <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+);
+
+// Piano key definitions for the result page
+const PIANO_KEYS = (() => {
+  const keys: { midi: number; name: string; isBlack: boolean }[] = [];
+  const noteNames = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+  // C2 (midi 36) to B4 (midi 71)
+  for (let midi = 36; midi <= 71; midi++) {
+    const noteIndex = ((midi % 12) + 12) % 12;
+    const octave = Math.floor(midi / 12) - 1;
+    const isBlack = [1, 3, 6, 8, 10].includes(noteIndex);
+    keys.push({ midi, name: `${noteNames[noteIndex]}${octave}`, isBlack });
+  }
+  return keys;
+})();
+
 function App() {
   const [activePage, setActivePage] = useState<Page>("Home");
   const [status, setStatus] = useState("Idle");
@@ -180,15 +230,19 @@ function App() {
     comfortHighMidi: null
   });
   const [recommendations, setRecommendations] = useState<SongRecommendation[]>([]);
-  const [selectedRecommendation, setSelectedRecommendation] = useState<SongRecommendation | null>(null);
   const [importBusy, setImportBusy] = useState(false);
   const [importLogs, setImportLogs] = useState<string[]>([]);
   const [importSummary, setImportSummary] = useState<string>("");
   const [importFileCount, setImportFileCount] = useState(0);
   const [showAllRecommendations, setShowAllRecommendations] = useState(false);
+  const [showDebug, setShowDebug] = useState(false);
+  const [expandedSong, setExpandedSong] = useState<string | null>(null);
+  const [showTechDetail, setShowTechDetail] = useState<string | null>(null);
+  const [recoFilter, setRecoFilter] = useState<string>("all");
 
   const pollTimerRef = useRef<number | null>(null);
   const pollErrorCountRef = useRef(0);
+  const pollInFlightRef = useRef(false);
   const stageRef = useRef<TestStage>("idle");
   const fastPassRef = useRef<{ stage: TestStage | null; startAt: number | null }>({
     stage: null,
@@ -211,13 +265,15 @@ function App() {
     const cached = localStorage.getItem(SELECTED_DEVICE_KEY);
     return cached && cached.trim().length > 0 ? cached : null;
   });
+  const selectedDeviceIdRef = useRef(selectedDeviceId);
+  useEffect(() => {
+    selectedDeviceIdRef.current = selectedDeviceId;
+  }, [selectedDeviceId]);
+
+  // ==================== LOGIC (unchanged) ====================
 
   const resetStability = () => {
-    stableRef.current = {
-      startAt: null,
-      lastValidAt: null,
-      samples: []
-    };
+    stableRef.current = { startAt: null, lastValidAt: null, samples: [] };
     lastGoodPitchRef.current = null;
     setStabilityMs(0);
     setSampleState("idle");
@@ -235,37 +291,23 @@ function App() {
     silenceStartRef.current = null;
     stableHistoryRef.current = [];
     resetStability();
-    setRangeResult({
-      lowMidi: null,
-      highMidi: null,
-      comfortLowMidi: null,
-      comfortHighMidi: null
-    });
+    setRangeResult({ lowMidi: null, highMidi: null, comfortLowMidi: null, comfortHighMidi: null });
     setAwaitingResultStep(false);
   };
 
   const finishRangeTest = () => {
     const lowMidi = lowMidiRef.current;
     const highMidi = highMidiRef.current;
-
     if (lowMidi === null || highMidi === null) {
       setTestInstruction("Range test did not complete. Please try again.");
       setTestStage("idle");
       stageRef.current = "idle";
       return;
     }
-
     const center = stableHistoryRef.current.length > 0 ? median(stableHistoryRef.current) : (lowMidi + highMidi) / 2;
     const comfortLow = Math.max(lowMidi, center - 3);
     const comfortHigh = Math.min(highMidi, center + 3);
-
-    setRangeResult({
-      lowMidi,
-      highMidi,
-      comfortLowMidi: comfortLow,
-      comfortHighMidi: comfortHigh
-    });
-
+    setRangeResult({ lowMidi, highMidi, comfortLowMidi: comfortLow, comfortHighMidi: comfortHigh });
     setTestInstruction("High note captured. Click Next Step to view result.");
     setTestStage("done");
     stageRef.current = "done";
@@ -275,7 +317,6 @@ function App() {
   const completeStageWithMidi = (stage: TestStage, stableMidi: number, timestamp: number) => {
     resetStability();
     fastPassRef.current = { stage: null, startAt: null };
-
     if (stage === "capture_low") {
       lowMidiRef.current = stableMidi;
       setRangeResult((prev) => ({ ...prev, lowMidi: stableMidi }));
@@ -287,7 +328,6 @@ function App() {
       silenceStartRef.current = null;
       return;
     }
-
     if (timestamp - stageEnteredAtRef.current < HIGH_STAGE_MIN_DELAY_MS) {
       return;
     }
@@ -306,7 +346,6 @@ function App() {
     if (stage !== "capture_low" && stage !== "capture_high") {
       return;
     }
-
     if (stage === "capture_high" && waitForSilenceBeforeHighRef.current) {
       if (level < RMS_THRESHOLD * 0.6) {
         if (silenceStartRef.current === null) {
@@ -315,7 +354,7 @@ function App() {
         if (timestamp - silenceStartRef.current >= SILENCE_RESET_MS) {
           waitForSilenceBeforeHighRef.current = false;
           silenceStartRef.current = null;
-          setTestInstruction("Now sing your highest comfortable 'ah' and hold for 1 second.");
+          setTestInstruction("Now sing your highest comfortable note and hold for 1 second.");
           setSampleState("idle");
         }
       } else {
@@ -323,11 +362,9 @@ function App() {
         setTestInstruction("Pause briefly (near silence), then sing your highest note.");
       }
     }
-
     const hasFreq = typeof pitch.frequency_hz === "number" && pitch.frequency_hz > 0;
     const confidenceOk = pitch.confidence > CONFIDENCE_THRESHOLD || pitch.note_name !== null;
     const isValid = level > RMS_THRESHOLD && hasFreq && (confidenceOk || hasFreq);
-
     if (!isValid || pitch.frequency_hz === null) {
       fastPassRef.current = { stage: null, startAt: null };
       setSampleState("invalid");
@@ -338,7 +375,6 @@ function App() {
       resetStability();
       return;
     }
-
     if (pitch.confidence >= CONFIDENCE_PASS_THRESHOLD) {
       const fastPass = fastPassRef.current;
       if (fastPass.stage !== stage || fastPass.startAt === null) {
@@ -350,15 +386,12 @@ function App() {
     } else if (fastPassRef.current.stage === stage) {
       fastPassRef.current = { stage: null, startAt: null };
     }
-
     setSampleState("valid");
     const midi = frequencyToMidi(pitch.frequency_hz);
     const prevGood = lastGoodPitchRef.current;
-    const smoothMidi =
-      prevGood !== null && Math.abs(midi - prevGood) <= 4 ? prevGood * 0.65 + midi * 0.35 : midi;
+    const smoothMidi = prevGood !== null && Math.abs(midi - prevGood) <= 4 ? prevGood * 0.65 + midi * 0.35 : midi;
     lastGoodPitchRef.current = smoothMidi;
     const stability = stableRef.current;
-
     if (stability.samples.length === 0) {
       stability.startAt = timestamp;
       stability.lastValidAt = timestamp;
@@ -366,7 +399,6 @@ function App() {
       setStabilityMs(0);
       return;
     }
-
     const center = median(stability.samples);
     if (Math.abs(smoothMidi - center) > STABLE_NOTE_DELTA) {
       stability.startAt = timestamp;
@@ -375,17 +407,14 @@ function App() {
       setStabilityMs(0);
       return;
     }
-
     stability.lastValidAt = timestamp;
     stability.samples.push(smoothMidi);
     if (stability.samples.length > 20) {
       stability.samples.shift();
     }
     stableHistoryRef.current.push(smoothMidi);
-
     const elapsed = stability.startAt !== null ? timestamp - stability.startAt : 0;
     setStabilityMs(elapsed);
-
     if (elapsed >= STABLE_REQUIRED_MS) {
       const stableMidi = median(stability.samples);
       completeStageWithMidi(stage, stableMidi, timestamp);
@@ -401,18 +430,16 @@ function App() {
     setRawInputLevel(0);
     inputLevelRef.current = 0;
     rawInputLevelRef.current = 0;
-    setPitchData({
-      frequency_hz: null,
-      confidence: 0,
-      note_name: null,
-      cents_offset: null
-    });
+    setPitchData({ frequency_hz: null, confidence: 0, note_name: null, cents_offset: null });
     pollErrorCountRef.current = 0;
+    pollInFlightRef.current = false;
   };
 
   const startLevelPolling = () => {
     stopLevelPolling();
     pollTimerRef.current = window.setInterval(async () => {
+      if (pollInFlightRef.current) return;
+      pollInFlightRef.current = true;
       let hasAnySuccess = false;
       let sampledLevel = rawInputLevelRef.current;
       try {
@@ -425,10 +452,7 @@ function App() {
         inputLevelRef.current = boostedLevel;
         sampledLevel = safeLevel;
         hasAnySuccess = true;
-      } catch {
-        // Keep previous level on transient command failure.
-      }
-
+      } catch { /* keep previous level */ }
       try {
         const pitch = await invoke<PitchData>("get_pitch_data");
         const safePitch: PitchData = {
@@ -437,23 +461,19 @@ function App() {
           note_name: pitch.note_name ?? null,
           cents_offset: typeof pitch.cents_offset === "number" ? pitch.cents_offset : null
         };
-
         setPitchData(safePitch);
         hasAnySuccess = true;
         handlePitchSampleForRangeTest(Date.now(), sampledLevel, safePitch);
-      } catch {
-        // Keep previous pitch on transient command failure.
-      }
-
+      } catch { /* keep previous pitch */ }
       if (hasAnySuccess) {
         pollErrorCountRef.current = 0;
       } else {
         pollErrorCountRef.current += 1;
       }
-
       if (pollErrorCountRef.current >= 20) {
         stopLevelPolling();
       }
+      pollInFlightRef.current = false;
     }, 100);
   };
 
@@ -464,20 +484,15 @@ function App() {
   const listInputDevices = async () => {
     const listedDevices = await invoke<InputDeviceInfo[]>("list_input_devices");
     setDevices(listedDevices);
-
     if (listedDevices.length === 0) {
       setSelectedDeviceId(null);
       localStorage.removeItem(SELECTED_DEVICE_KEY);
       setStatus("No input device found");
       return;
     }
-
-    const selectedStillExists = selectedDeviceId
-      ? listedDevices.some((device) => device.id === selectedDeviceId)
-      : false;
-
-    const nextSelectedId: string =
-      selectedStillExists && selectedDeviceId ? selectedDeviceId : listedDevices[0].id;
+    const currentDeviceId = selectedDeviceIdRef.current;
+    const selectedStillExists = currentDeviceId ? listedDevices.some((d) => d.id === currentDeviceId) : false;
+    const nextSelectedId = selectedStillExists && currentDeviceId ? currentDeviceId : listedDevices[0].id;
     setSelectedDeviceId(nextSelectedId);
     localStorage.setItem(SELECTED_DEVICE_KEY, nextSelectedId);
     setStatus(`Found ${listedDevices.length} input device(s)`);
@@ -485,7 +500,9 @@ function App() {
 
   useEffect(() => {
     if (activePage === "Home") {
-      void listInputDevices();
+      listInputDevices().catch((err) => {
+        setStatus(`Failed to list devices: ${String(err)}`);
+      });
     }
   }, [activePage]);
 
@@ -493,7 +510,7 @@ function App() {
     try {
       await invoke("start_stream", { deviceId: selectedDeviceId });
       startLevelPolling();
-      setStatus(`Audio input started (${selectedDeviceId ?? "default"})`);
+      setStatus(`Audio input started`);
       return true;
     } catch (error) {
       stopLevelPolling();
@@ -522,23 +539,18 @@ function App() {
     await invoke("stop_stream").catch(() => undefined);
     stopLevelPolling();
     const started = await startStream();
-    if (!started) {
-      return;
-    }
-
+    if (!started) return;
     resetRangeTest();
     setTestStage("capture_low");
     stageRef.current = "capture_low";
     stageEnteredAtRef.current = Date.now();
     setAwaitingResultStep(false);
-    setTestInstruction("Sing your lowest comfortable 'ah' and hold for 1 second.");
+    setTestInstruction("Sing your lowest comfortable note and hold for 1 second.");
     setStatus("Range test started");
   };
 
   const goToResultStep = () => {
-    if (rangeResult.lowMidi === null || rangeResult.highMidi === null) {
-      return;
-    }
+    if (rangeResult.lowMidi === null || rangeResult.highMidi === null) return;
     setAwaitingResultStep(false);
     setActivePage("Result");
   };
@@ -547,45 +559,14 @@ function App() {
     setSelectedDeviceId(deviceId);
     localStorage.setItem(SELECTED_DEVICE_KEY, deviceId);
     const device = devices.find((item) => item.id === deviceId);
-    if (device) {
-      setStatus(`Selected: ${device.name}`);
-    }
-  };
-
-  const renderResultScale = () => {
-    const { lowMidi, highMidi, comfortLowMidi, comfortHighMidi } = rangeResult;
-    if (lowMidi === null || highMidi === null || comfortLowMidi === null || comfortHighMidi === null) {
-      return <p>No results yet. Complete a range test in Test Live.</p>;
-    }
-
-    const span = Math.max(1, highMidi - lowMidi);
-    const comfortLeft = ((comfortLowMidi - lowMidi) / span) * 100;
-    const comfortWidth = ((comfortHighMidi - comfortLowMidi) / span) * 100;
-
-    return (
-      <div className="result-block">
-        <p>Lowest note: {midiToNoteName(lowMidi)} (MIDI {Math.round(lowMidi)})</p>
-        <p>Highest note: {midiToNoteName(highMidi)} (MIDI {Math.round(highMidi)})</p>
-        <p>
-          Comfort range: {midiToNoteName(comfortLowMidi)} - {midiToNoteName(comfortHighMidi)}
-        </p>
-        <div className="range-track">
-          <div
-            className="range-comfort"
-            style={{ left: `${Math.max(0, comfortLeft)}%`, width: `${Math.max(2, comfortWidth)}%` }}
-          />
-        </div>
-      </div>
-    );
+    if (device) setStatus(`Selected: ${device.name}`);
   };
 
   const loadRecommendations = async () => {
     const { lowMidi, highMidi, comfortLowMidi, comfortHighMidi } = rangeResult;
-
     try {
       let recs: SongRecommendation[] = [];
       const importedOnly = await invoke<SongRecommendation[]>("recommend_imported_songs");
-
       if (lowMidi !== null && highMidi !== null && comfortLowMidi !== null && comfortHighMidi !== null) {
         recs = await invoke<SongRecommendation[]>("recommend_songs", {
           userLowMidi: Math.round(lowMidi),
@@ -593,7 +574,6 @@ function App() {
           comfortLowMidi: Math.round(comfortLowMidi),
           comfortHighMidi: Math.round(comfortHighMidi)
         });
-
         if (recs.length === 0) {
           recs = await invoke<SongRecommendation[]>("recommend_songs", {
             userLowMidi: Math.round(lowMidi) - 4,
@@ -605,10 +585,7 @@ function App() {
             setStatus("No strict matches. Showing closest challenge songs.");
           }
         }
-      } else {
-        recs = [];
       }
-
       const merged = [...recs];
       const seen = new Set(merged.map((s) => `${s.title}::${s.artist}`));
       for (const song of importedOnly) {
@@ -618,34 +595,24 @@ function App() {
           merged.push(song);
         }
       }
-
       setRecommendations(merged);
-      setSelectedRecommendation(merged.length > 0 ? merged[0] : null);
       setShowAllRecommendations(false);
     } catch (error) {
       setStatus(`Failed to load recommendations: ${String(error)}`);
       setRecommendations([]);
-      setSelectedRecommendation(null);
       setShowAllRecommendations(false);
     }
   };
 
   const importAudioFiles = async () => {
     const paths = await invoke<string[]>("pick_audio_files");
-    if (paths.length === 0) {
-      return;
-    }
-
+    if (paths.length === 0) return;
     setImportBusy(true);
     setImportFileCount(paths.length);
     setImportLogs([`Starting analysis for ${paths.length} file(s)...`]);
     setImportSummary("");
-
     try {
-      const result = await invoke<ImportAnalyzeResponse>("import_and_analyze_songs", {
-        filePaths: paths
-      });
-
+      const result = await invoke<ImportAnalyzeResponse>("import_and_analyze_songs", { filePaths: paths });
       const logs = result.logs ?? [];
       setImportLogs(logs.length > 0 ? logs : ["No analyzer logs"]);
       setImportSummary(
@@ -669,307 +636,545 @@ function App() {
     }
   }, [activePage, rangeResult.lowMidi, rangeResult.highMidi, rangeResult.comfortLowMidi, rangeResult.comfortHighMidi]);
 
-  const renderPage = () => {
-    if (activePage === "Home") {
-      return (
-        <>
-          <div className="result-block">
-            <p className="test-hint">Welcome to MyPitch</p>
-            <p>Choose your microphone input device, then run Range Test in Test Live.</p>
-          </div>
-          <p>Input Device</p>
-          <div className="actions">
-            <button onClick={listInputDevices}>Refresh Devices</button>
-          </div>
-          <select
-            id="input-device-select"
-            value={selectedDeviceId ?? ""}
-            onChange={(event) => onSelectDevice(event.target.value)}
-            disabled={devices.length === 0}
-          >
-            {devices.length === 0 ? (
-              <option value="">No device found</option>
-            ) : (
-              devices.map((device) => (
-                <option key={device.id} value={device.id}>
-                  {device.name} | {device.default_sample_rate ?? "n/a"} Hz | {device.channels ?? "n/a"} ch
-                </option>
-              ))
-            )}
-          </select>
-        </>
-      );
-    }
+  // ==================== RENDER HELPERS ====================
 
-    if (activePage === "Test Live") {
-      const lowCaptured = rangeResult.lowMidi !== null;
-      const highCaptured = rangeResult.highMidi !== null;
-      const step1Done = lowCaptured;
-      const step2Done = highCaptured;
-      const step3Active = awaitingResultStep;
-      const step3Done = false;
-      const holdProgress = Math.round((Math.min(STABLE_REQUIRED_MS, stabilityMs) / STABLE_REQUIRED_MS) * 100);
-      const liveClass = sampleState === "valid" ? "state-valid" : sampleState === "invalid" ? "state-invalid" : "";
+  const holdProgress = Math.min(STABLE_REQUIRED_MS, stabilityMs);
+  const holdPct = Math.round((holdProgress / STABLE_REQUIRED_MS) * 100);
 
-      return (
-        <>
-          <div className="flow-steps" aria-label="Range test steps">
-            <div className={`flow-step ${liveClass} ${step1Done ? "done" : ""} ${testStage === "capture_low" ? "active" : ""}`}>
-              <span>1</span>
-              <p>Hold Low Note</p>
-            </div>
-            <div className={`flow-step ${liveClass} ${step2Done ? "done" : ""} ${testStage === "capture_high" ? "active" : ""}`}>
-              <span>2</span>
-              <p>Hold High Note</p>
-            </div>
-            <div className={`flow-step ${liveClass} ${step3Done ? "done" : ""} ${step3Active ? "active" : ""}`}>
-              <span>3</span>
-              <p>View Result</p>
-            </div>
+  const ringClass = holdPct >= 100 ? "p100" : holdPct >= 75 ? "p75" : holdPct >= 50 ? "p50" : holdPct >= 25 ? "p25" : "p0";
+
+  const isDetecting = sampleState === "valid" && (testStage === "capture_low" || testStage === "capture_high");
+
+  const hasRange = rangeResult.lowMidi !== null && rangeResult.highMidi !== null;
+
+  const navItems: { page: Page; label: string; icon: () => JSX.Element }[] = [
+    { page: "Home", label: "Home", icon: HomeIcon },
+    { page: "Test Live", label: "Test Live", icon: MicIcon },
+    { page: "Result", label: "Result", icon: WaveIcon },
+    { page: "Song Library", label: "Library", icon: MusicIcon },
+    { page: "Recommendations", label: "For You", icon: StarIcon },
+  ];
+
+  // ==================== PAGE RENDERERS ====================
+
+  const renderHome = () => (
+    <>
+      <div className="card">
+        <div className="welcome-hero">
+          <div className="welcome-icon"><MicIcon /></div>
+          <h2>Welcome to MyPitch</h2>
+          <p>Discover your vocal range and find songs that match your voice perfectly.</p>
+          <button className="btn btn-primary" onClick={() => setActivePage("Test Live")}>
+            <span className="btn-icon"><PlayIcon /></span>
+            Start Range Test
+          </button>
+        </div>
+      </div>
+
+      <div className="card">
+        <div className="card-header">
+          <div>
+            <div className="card-title">Microphone</div>
+            <div className="card-subtitle">Select your input device</div>
           </div>
-
-          <div className="result-block">
-            <p className="test-hint">{testInstruction}</p>
-            <p>
-              Valid sample rule: confidence &gt; {CONFIDENCE_THRESHOLD}, RMS &gt; {RMS_THRESHOLD}, stable for at least {STABLE_REQUIRED_MS} ms
-            </p>
-            <p>Raw RMS: {rawInputLevel.toFixed(4)}</p>
-            <p>Hold steady progress: {Math.min(STABLE_REQUIRED_MS, stabilityMs)} / {STABLE_REQUIRED_MS} ms</p>
-            <div className="hold-track">
-              <div className="hold-fill" style={{ width: `${holdProgress}%` }} />
-            </div>
-            <div className="actions">
-              <button onClick={startRangeTest}>Start Range Test</button>
-              <button onClick={stopStream}>Stop Audio</button>
-              <button onClick={resetTestFlow}>Reset Test</button>
-              {awaitingResultStep && (
-                <button onClick={goToResultStep}>Next Step: View Result</button>
+          <button className="btn btn-secondary btn-sm" onClick={listInputDevices}>Refresh</button>
+        </div>
+        <div className="device-selector">
+          <div className="select-wrap">
+            <select
+              className="select-styled"
+              value={selectedDeviceId ?? ""}
+              onChange={(e) => onSelectDevice(e.target.value)}
+              disabled={devices.length === 0}
+              aria-label="Input device"
+            >
+              {devices.length === 0 ? (
+                <option value="">No device found</option>
+              ) : (
+                devices.map((device) => (
+                  <option key={device.id} value={device.id}>
+                    {device.name} | {device.default_sample_rate ?? "n/a"} Hz | {device.channels ?? "n/a"} ch
+                  </option>
+                ))
               )}
-            </div>
+            </select>
+            <span className="select-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
           </div>
+        </div>
+      </div>
 
-          <div className="pitch-grid">
-            <div className="pitch-card">
-              <p className="pitch-label">Stage</p>
-              <p className="pitch-value">{stageLabel(testStage)}</p>
-            </div>
-            <div className="pitch-card">
-              <p className="pitch-label">Note</p>
-              <p className="pitch-value">{pitchData.note_name ?? "-"}</p>
-            </div>
-            <div className="pitch-card">
-              <p className="pitch-label">Frequency</p>
-              <p className="pitch-value">
-                {pitchData.frequency_hz ? `${pitchData.frequency_hz.toFixed(2)} Hz` : "-"}
-              </p>
-            </div>
-            <div className="pitch-card">
-              <p className="pitch-label">Confidence</p>
-              <p className="pitch-value">{(pitchData.confidence * 100).toFixed(0)}%</p>
-            </div>
+      <div className="quick-actions">
+        <div className="quick-card" onClick={() => setActivePage("Test Live")}>
+          <div className="quick-card-icon"><MicIcon /></div>
+          <h4>Range Test</h4>
+          <p>Find your vocal range</p>
+        </div>
+        <div className="quick-card" onClick={() => setActivePage("Song Library")}>
+          <div className="quick-card-icon"><UploadIcon /></div>
+          <h4>Import Songs</h4>
+          <p>Analyze your own music</p>
+        </div>
+      </div>
+    </>
+  );
+
+  const renderTestLive = () => {
+    const lowDone = rangeResult.lowMidi !== null;
+    const highDone = rangeResult.highMidi !== null;
+
+    return (
+      <div className="card">
+        {/* Stepper */}
+        <div className="stepper">
+          <div className={`step ${lowDone ? "done" : testStage === "capture_low" ? "active" : ""}`}>
+            <div className="step-circle">{lowDone ? "\u2713" : "1"}</div>
+            <span className="step-label">Low Note</span>
           </div>
-        </>
-      );
-    }
+          <div className={`step-line ${lowDone ? "done" : ""}`} />
+          <div className={`step ${highDone ? "done" : testStage === "capture_high" ? "active" : ""}`}>
+            <div className="step-circle">{highDone ? "\u2713" : "2"}</div>
+            <span className="step-label">High Note</span>
+          </div>
+          <div className={`step-line ${highDone ? "done" : ""}`} />
+          <div className={`step ${testStage === "done" ? "done" : awaitingResultStep ? "active" : ""}`}>
+            <div className="step-circle">{testStage === "done" ? "\u2713" : "3"}</div>
+            <span className="step-label">Result</span>
+          </div>
+        </div>
 
-    if (activePage === "Result") {
-      return renderResultScale();
-    }
+        {/* Note ring */}
+        <div className="note-display">
+          <div className="note-ring">
+            <div className="note-ring-bg" />
+            <div className={`note-ring-progress ${ringClass}`} />
+            <span className={`note-value ${isDetecting ? "detecting" : ""}`}>
+              {pitchData.note_name ?? "-"}
+            </span>
+          </div>
+          <div className="note-freq">
+            {pitchData.frequency_hz ? `${pitchData.frequency_hz.toFixed(2)} Hz` : "Waiting for input..."}
+          </div>
+        </div>
 
-    if (activePage === "Song Library") {
-      return (
-        <div className="result-block">
-          <p className="test-hint">Import Audio Files</p>
-          <p>Select one or more mp3/wav files. The app runs local analysis and updates generated song metadata.</p>
-          {importBusy && (
-            <div className="analyze-visual">
-              <p className="analyze-title">
-                Analyzing {importFileCount} file(s)
-                <span className="dot dot-1">.</span>
-                <span className="dot dot-2">.</span>
-                <span className="dot dot-3">.</span>
-              </p>
-              <div className="analyze-track">
-                <div className="analyze-fill" />
-              </div>
-              <div className="analyze-steps">
-                <span>1) Decode audio</span>
-                <span>2) Pitch tracking (pyin)</span>
-                <span>3) Write songs_generated.csv</span>
-              </div>
-            </div>
+        <div className="instruction-text">{testInstruction}</div>
+
+        {/* Level meter */}
+        <div className="level-meter">
+          <span className="level-label-sm">Input Level</span>
+          <div className="level-bar">
+            <div className="level-bar-fill" style={{ width: `${Math.round(inputLevel * 100)}%` }} />
+          </div>
+          <span className="level-pct">{(inputLevel * 100).toFixed(0)}%</span>
+        </div>
+
+        {/* Actions */}
+        <div className="test-actions">
+          <button className="btn btn-primary btn-sm" onClick={startRangeTest}>Start Test</button>
+          <button className="btn btn-secondary btn-sm" onClick={stopStream}>Stop</button>
+          <button className="btn btn-secondary btn-sm" onClick={resetTestFlow}>Reset</button>
+          {awaitingResultStep && (
+            <button className="btn btn-accent btn-sm" onClick={goToResultStep}>View Result</button>
           )}
-          <div className="actions">
-            <button onClick={importAudioFiles} disabled={importBusy}>
-              {importBusy ? "Analyzing..." : "Import Audio"}
+        </div>
+
+        {/* Debug toggle */}
+        <div className="debug-toggle">
+          <button onClick={() => setShowDebug((prev) => !prev)}>
+            {showDebug ? "Hide technical details" : "Show technical details"}
+          </button>
+        </div>
+        {showDebug && (
+          <div className="debug-panel">
+            <div className="debug-grid">
+              <div className="debug-item">
+                <div className="debug-label">RMS</div>
+                <div className="debug-value">{rawInputLevel.toFixed(4)}</div>
+              </div>
+              <div className="debug-item">
+                <div className="debug-label">Confidence</div>
+                <div className="debug-value">{(pitchData.confidence * 100).toFixed(0)}%</div>
+              </div>
+              <div className="debug-item">
+                <div className="debug-label">Hold</div>
+                <div className="debug-value">{holdProgress}ms</div>
+              </div>
+              <div className="debug-item">
+                <div className="debug-label">Stage</div>
+                <div className="debug-value">
+                  {testStage === "capture_low" ? "Low" : testStage === "capture_high" ? "High" : testStage === "done" ? "Done" : "Idle"}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderResult = () => {
+    const { lowMidi, highMidi, comfortLowMidi, comfortHighMidi } = rangeResult;
+    if (lowMidi === null || highMidi === null || comfortLowMidi === null || comfortHighMidi === null) {
+      return (
+        <div className="card">
+          <div className="empty-state">
+            <h3>No results yet</h3>
+            <p>Complete a range test in Test Live to see your vocal range.</p>
+            <button className="btn btn-primary" onClick={() => setActivePage("Test Live")} style={{ marginTop: 16 }}>
+              Go to Test Live
             </button>
           </div>
-          {importSummary && <p>{importSummary}</p>}
+        </div>
+      );
+    }
+
+    const roundedLow = Math.round(lowMidi);
+    const roundedHigh = Math.round(highMidi);
+    const roundedComfortLow = Math.round(comfortLowMidi);
+    const roundedComfortHigh = Math.round(comfortHighMidi);
+    const semitones = roundedHigh - roundedLow;
+    const octaves = (semitones / 12).toFixed(1);
+    const voiceType = getVoiceType(lowMidi, highMidi);
+
+    return (
+      <>
+        <div className="card">
+          <div className="result-hero">
+            <h2>Your Vocal Range</h2>
+            <div className="result-range-text">
+              {midiToNoteName(lowMidi)} &ndash; {midiToNoteName(highMidi)}
+            </div>
+            <div className="result-meta">About {octaves} octaves &middot; {semitones} semitones</div>
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="card-title" style={{ marginBottom: 12 }}>Range Visualization</div>
+          <div className="piano-wrap">
+            <div className="piano">
+              {PIANO_KEYS.map((key) => {
+                let cls = "piano-key";
+                if (key.isBlack) cls += " black";
+                if (key.midi >= roundedComfortLow && key.midi <= roundedComfortHigh) {
+                  cls += " comfort";
+                } else if (key.midi >= roundedLow && key.midi <= roundedHigh) {
+                  cls += " in-range";
+                }
+                return <div key={key.midi} className={cls}>{key.isBlack ? "" : key.name}</div>;
+              })}
+            </div>
+          </div>
+          <div className="piano-legend">
+            <div className="legend-item"><div className="legend-swatch range" /> Full Range</div>
+            <div className="legend-item"><div className="legend-swatch comfort" /> Comfort Zone</div>
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="voice-type-card">
+            <div className="voice-type-icon"><MicIcon /></div>
+            <div className="voice-type-info">
+              <h4>{voiceType.name}</h4>
+              <p>{voiceType.description}</p>
+            </div>
+          </div>
+          <div className="result-cta">
+            <button className="btn btn-accent" onClick={() => setActivePage("Recommendations")}>
+              <span className="btn-icon"><StarIcon /></span>
+              Find Songs for My Voice
+            </button>
+          </div>
+        </div>
+      </>
+    );
+  };
+
+  const renderSongLibrary = () => (
+    <>
+      <div className="card">
+        <div className="drop-zone" onClick={importBusy ? undefined : importAudioFiles}>
+          <div className="drop-icon"><UploadIcon /></div>
+          <h3>{importBusy ? "Analyzing..." : "Drop audio files here"}</h3>
+          <p>{importBusy ? `Processing ${importFileCount} file(s)` : "or click to browse \u00b7 Supports MP3, WAV"}</p>
+        </div>
+      </div>
+
+      {importBusy && (
+        <div className="card">
+          <div className="card-title" style={{ marginBottom: 12 }}>Analysis Progress</div>
+          <div className="progress-steps">
+            <div className="progress-step done">1. Decode Audio</div>
+            <div className="progress-step active">2. Pitch Tracking</div>
+            <div className="progress-step">3. Save Results</div>
+          </div>
+          <div className="import-log">Processing {importFileCount} file(s)...</div>
+        </div>
+      )}
+
+      {importSummary && (
+        <div className="card">
+          <div className="card-title" style={{ marginBottom: 8 }}>Import Result</div>
+          <p style={{ fontSize: 14 }}>{importSummary}</p>
           {importLogs.length > 0 && (
-            <div className="fit-reasons">
-              {importLogs.map((log) => (
-                <p key={log}>{log}</p>
+            <div style={{ marginTop: 8 }}>
+              {importLogs.map((log, i) => (
+                <p key={i} className="import-log">{log}</p>
               ))}
             </div>
           )}
         </div>
-      );
-    }
+      )}
+    </>
+  );
 
-    if (activePage === "Recommendations") {
-      if (recommendations.length === 0) {
-        return (
-          <div className="result-block">
-            <p className="test-hint">No recommendation found for current detected range.</p>
-            <p>
-              Try running the test again with clearer low/high separation, or sing a little louder so confidence and
-              range capture are more stable.
-            </p>
-          </div>
-        );
-      }
-
-      const visibleRecommendations = showAllRecommendations
-        ? recommendations
-        : (() => {
-            const top = recommendations.slice(0, 5);
-            const seen = new Set(top.map((s) => `${s.title}::${s.artist}`));
-            const imported = recommendations.filter((s) => {
-              if (!s.is_imported) {
-                return false;
-              }
-              const key = `${s.title}::${s.artist}`;
-              if (seen.has(key)) {
-                return false;
-              }
-              seen.add(key);
-              return true;
-            });
-            return top.concat(imported);
-          })();
-
+  const renderRecommendations = () => {
+    if (recommendations.length === 0) {
       return (
-        <div className="reco-grid">
-          <div className="reco-list">
-            {visibleRecommendations.map((song) => (
-              (() => {
-                const bucket = fitBucket(song.fit_score);
-                return (
-              <button
-                key={`${song.title}-${song.artist}`}
-                className={`reco-item ${selectedRecommendation?.title === song.title && selectedRecommendation?.artist === song.artist ? "active" : ""}`}
-                onClick={() => setSelectedRecommendation(song)}
-              >
-                <span className="reco-title">{song.title}</span>
-                <span>{song.artist}</span>
-                <span>{song.shift > 0 ? `+${song.shift}` : `${song.shift}`} st</span>
-                <span className={`fit-badge ${bucket.className}`}>{song.fit_score}</span>
-                <div className="fit-meter">
-                  <div className={`fit-meter-fill ${bucket.className}`} style={{ width: `${song.fit_score}%` }} />
-                </div>
-              </button>
-                );
-              })()
-            ))}
-            {recommendations.length > 5 && (
-              <button
-                className="reco-item"
-                onClick={() => setShowAllRecommendations((prev) => !prev)}
-              >
-                <span className="reco-title">
-                  {showAllRecommendations ? "Show Top 5" : `Show All (${recommendations.length})`}
-                </span>
-                <span />
-                <span />
-                <span />
-              </button>
-            )}
+        <div className="card">
+          <div className="empty-state">
+            <h3>No recommendations found</h3>
+            <p>Try running the test again with clearer low/high separation, or import songs to analyze.</p>
           </div>
-
-          {selectedRecommendation && (
-            <div className="result-block">
-              {(() => {
-                const bucket = fitBucket(selectedRecommendation.fit_score);
-                const reasons = buildFitReasons(selectedRecommendation);
-                return (
-                  <>
-              <p className="test-hint">{selectedRecommendation.title}</p>
-              <p>Artist: {selectedRecommendation.artist}</p>
-              <p>Recommended Shift: {selectedRecommendation.shift > 0 ? `+${selectedRecommendation.shift}` : selectedRecommendation.shift} semitones</p>
-              <p>
-                Fit Score: <span className={`fit-badge ${bucket.className}`}>{selectedRecommendation.fit_score}</span> ({bucket.label})
-              </p>
-              <p>
-                Melody Range (shifted): {midiToNoteName(selectedRecommendation.shifted_low_midi)} - {midiToNoteName(selectedRecommendation.shifted_high_midi)}
-              </p>
-              <p>
-                Chorus Range (shifted): {midiToNoteName(selectedRecommendation.shifted_chorus_low_midi)} - {midiToNoteName(selectedRecommendation.shifted_chorus_high_midi)}
-              </p>
-              <p>
-                Original Range: {midiToNoteName(selectedRecommendation.original_low_midi)} - {midiToNoteName(selectedRecommendation.original_high_midi)}
-              </p>
-              <p>
-                Original Chorus: {midiToNoteName(selectedRecommendation.original_chorus_low_midi)} - {midiToNoteName(selectedRecommendation.original_chorus_high_midi)}
-              </p>
-              <p>Original Key: {selectedRecommendation.is_original_key ? "Yes" : "No"}</p>
-              <div className="fit-detail-grid">
-                <p>shift penalty: {selectedRecommendation.fit_detail.shift_penalty.toFixed(1)}</p>
-                <p>range penalty: {selectedRecommendation.fit_detail.range_penalty.toFixed(1)}</p>
-                <p>chorus penalty: {selectedRecommendation.fit_detail.chorus_penalty.toFixed(1)}</p>
-                <p>high note penalty: {selectedRecommendation.fit_detail.high_note_penalty.toFixed(1)}</p>
-                <p>low penalty: {selectedRecommendation.fit_detail.low_penalty.toFixed(1)}</p>
-                <p>comfort headroom: {selectedRecommendation.fit_detail.headroom_comfort}</p>
-              </div>
-              <div className="fit-reasons">
-                {reasons.map((reason) => (
-                  <p key={reason}>{reason}</p>
-                ))}
-              </div>
-                  </>
-                );
-              })()}
-            </div>
-          )}
         </div>
       );
     }
 
-    return <p>Page unavailable.</p>;
+    const visibleRecommendations = showAllRecommendations
+      ? recommendations
+      : (() => {
+          const top = recommendations.slice(0, 5);
+          const seen = new Set(top.map((s) => `${s.title}::${s.artist}`));
+          const imported = recommendations.filter((s) => {
+            if (!s.is_imported) return false;
+            const key = `${s.title}::${s.artist}`;
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+          });
+          return top.concat(imported);
+        })();
+
+    const filtered = recoFilter === "all"
+      ? visibleRecommendations
+      : visibleRecommendations.filter((s) => fitBucket(s.fit_score).className === recoFilter);
+
+    return (
+      <>
+        <div className="filter-bar">
+          {["all", "great", "singable", "challenging"].map((f) => (
+            <button
+              key={f}
+              className={`filter-chip ${recoFilter === f ? "active" : ""}`}
+              onClick={() => setRecoFilter(f)}
+            >
+              {f === "all" ? "All" : f === "great" ? "Great Fit" : f === "singable" ? "Singable" : "Challenging"}
+            </button>
+          ))}
+        </div>
+
+        <div className="reco-cards">
+          {filtered.map((song, idx) => {
+            const bucket = fitBucket(song.fit_score);
+            const songKey = `${song.title}::${song.artist}`;
+            const isExpanded = expandedSong === songKey;
+            const reasons = buildFitReasons(song);
+            const d = song.fit_detail;
+
+            // Compute range comparison bar positions (normalized to piano range 36-71)
+            const pianoSpan = 71 - 36;
+            const yourLeft = hasRange ? ((Math.round(rangeResult.lowMidi!) - 36) / pianoSpan) * 100 : 0;
+            const yourWidth = hasRange ? ((Math.round(rangeResult.highMidi!) - Math.round(rangeResult.lowMidi!)) / pianoSpan) * 100 : 0;
+            const songLeft = ((song.shifted_low_midi - 36) / pianoSpan) * 100;
+            const songWidth = ((song.shifted_high_midi - song.shifted_low_midi) / pianoSpan) * 100;
+
+            return (
+              <div
+                key={songKey}
+                className={`reco-card ${isExpanded ? "expanded" : ""}`}
+                onClick={() => setExpandedSong(isExpanded ? null : songKey)}
+              >
+                <div className="reco-card-main">
+                  <div className="reco-rank">{idx + 1}</div>
+                  <div className="reco-info">
+                    <div className="reco-song-title">{song.title}</div>
+                    <div className="reco-artist">{song.artist}</div>
+                  </div>
+                </div>
+                <div className="reco-shift">
+                  {song.shift > 0 ? `+${song.shift}` : `${song.shift}`} st
+                </div>
+                <div className="reco-score">
+                  <div className="score-bar-wrap">
+                    <div className={`score-bar ${bucket.className}`} style={{ width: `${song.fit_score}%` }} />
+                  </div>
+                  <span className={`score-badge ${bucket.className}`}>
+                    {song.fit_score} {bucket.label}
+                  </span>
+                </div>
+
+                {isExpanded && (
+                  <div className="reco-detail">
+                    <div className="detail-grid">
+                      <div className="detail-item">
+                        <label>Melody Range (shifted)</label>
+                        <span>{midiToNoteName(song.shifted_low_midi)} &ndash; {midiToNoteName(song.shifted_high_midi)}</span>
+                      </div>
+                      <div className="detail-item">
+                        <label>Chorus Range (shifted)</label>
+                        <span>{midiToNoteName(song.shifted_chorus_low_midi)} &ndash; {midiToNoteName(song.shifted_chorus_high_midi)}</span>
+                      </div>
+                      <div className="detail-item">
+                        <label>Original Range</label>
+                        <span>{midiToNoteName(song.original_low_midi)} &ndash; {midiToNoteName(song.original_high_midi)}</span>
+                      </div>
+                      <div className="detail-item">
+                        <label>Key Shift</label>
+                        <span>{song.is_original_key ? "Original key" : `${song.shift > 0 ? "+" : ""}${song.shift} semitones`}</span>
+                      </div>
+                    </div>
+
+                    {/* Range comparison */}
+                    {hasRange && (
+                      <>
+                        <div className="range-compare">
+                          <span className="range-compare-label">Your range</span>
+                          <div className="range-compare-bar">
+                            <div className="range-compare-fill yours" style={{ left: `${Math.max(0, yourLeft)}%`, width: `${Math.max(2, yourWidth)}%` }} />
+                          </div>
+                        </div>
+                        <div className="range-compare">
+                          <span className="range-compare-label">Song range</span>
+                          <div className="range-compare-bar">
+                            <div className="range-compare-fill song" style={{ left: `${Math.max(0, songLeft)}%`, width: `${Math.max(2, songWidth)}%` }} />
+                          </div>
+                        </div>
+                      </>
+                    )}
+
+                    <ul className="fit-reasons-list">
+                      {reasons.map((r, i) => <li key={i}>{r}</li>)}
+                    </ul>
+
+                    {/* Tech details toggle */}
+                    <button
+                      className="btn btn-secondary btn-sm"
+                      style={{ marginTop: 10 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowTechDetail(showTechDetail === songKey ? null : songKey);
+                      }}
+                    >
+                      {showTechDetail === songKey ? "Hide penalties" : "Show penalty breakdown"}
+                    </button>
+
+                    {showTechDetail === songKey && (
+                      <div className="tech-details">
+                        <div className="penalty-grid">
+                          <div className="penalty-item">
+                            <div className="penalty-label">Shift</div>
+                            <div className={`penalty-value ${d.shift_penalty <= 6 ? "ok" : d.shift_penalty <= 15 ? "warn" : "bad"}`}>
+                              {d.shift_penalty.toFixed(1)}
+                            </div>
+                          </div>
+                          <div className="penalty-item">
+                            <div className="penalty-label">Range</div>
+                            <div className={`penalty-value ${d.range_penalty <= 4 ? "ok" : d.range_penalty <= 12 ? "warn" : "bad"}`}>
+                              {d.range_penalty.toFixed(1)}
+                            </div>
+                          </div>
+                          <div className="penalty-item">
+                            <div className="penalty-label">Chorus</div>
+                            <div className={`penalty-value ${d.chorus_penalty <= 5 ? "ok" : d.chorus_penalty <= 12 ? "warn" : "bad"}`}>
+                              {d.chorus_penalty.toFixed(1)}
+                            </div>
+                          </div>
+                          <div className="penalty-item">
+                            <div className="penalty-label">High Notes</div>
+                            <div className={`penalty-value ${d.high_note_penalty <= 3 ? "ok" : d.high_note_penalty <= 8 ? "warn" : "bad"}`}>
+                              {d.high_note_penalty.toFixed(1)}
+                            </div>
+                          </div>
+                          <div className="penalty-item">
+                            <div className="penalty-label">Low</div>
+                            <div className={`penalty-value ${d.low_penalty <= 5 ? "ok" : "warn"}`}>
+                              {d.low_penalty.toFixed(1)}
+                            </div>
+                          </div>
+                          <div className="penalty-item">
+                            <div className="penalty-label">Headroom</div>
+                            <div className={`penalty-value ${d.headroom_comfort >= 0 ? "ok" : "warn"}`}>
+                              {d.headroom_comfort >= 0 ? "+" : ""}{d.headroom_comfort}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {recommendations.length > 5 && (
+            <button
+              className="show-all-btn"
+              onClick={() => setShowAllRecommendations((prev) => !prev)}
+            >
+              {showAllRecommendations ? "Show Top 5" : `Show All (${recommendations.length})`}
+            </button>
+          )}
+        </div>
+      </>
+    );
   };
+
+  // ==================== MAIN RENDER ====================
+
+  const isStreamActive = pollTimerRef.current !== null;
 
   return (
     <div className="app-shell">
-      <header>
-        <h1>MyPitch</h1>
-      </header>
+      {/* Header */}
+      <div className="header">
+        <div className="header-left">
+          <div className="logo"><MicIcon /></div>
+          <h1>MyPitch</h1>
+        </div>
+        {hasRange && (
+          <div className="range-badge">
+            <span className="range-badge-dot" />
+            {midiToNoteName(rangeResult.lowMidi!)} &ndash; {midiToNoteName(rangeResult.highMidi!)}
+          </div>
+        )}
+      </div>
 
+      {/* Nav */}
       <nav className="tabs">
-        {pages.map((page) => (
+        {navItems.map(({ page, label, icon: Icon }) => (
           <button
             key={page}
             className={activePage === page ? "active" : ""}
             onClick={() => setActivePage(page)}
           >
-            {page}
+            <span className="nav-icon"><Icon /></span>
+            {label}
           </button>
         ))}
       </nav>
 
-      <main className="card">
-        <h2>{activePage}</h2>
-        {renderPage()}
+      {/* Page content */}
+      {activePage === "Home" && renderHome()}
+      {activePage === "Test Live" && renderTestLive()}
+      {activePage === "Result" && renderResult()}
+      {activePage === "Song Library" && renderSongLibrary()}
+      {activePage === "Recommendations" && renderRecommendations()}
 
-        {activePage === "Test Live" && (
-          <div className="level-wrap">
-            <p className="level-label">Input Level: {(inputLevel * 100).toFixed(0)}%</p>
-            <div className="level-track">
-              <div className="level-fill" style={{ width: `${Math.round(inputLevel * 100)}%` }} />
-            </div>
-          </div>
-        )}
-
-        {activePage !== "Home" && <p className="status">{status}</p>}
-      </main>
+      {/* Status bar */}
+      <div className="status-bar">
+        <span className={`status-dot ${isStreamActive ? "active" : ""}`} />
+        <span>{status}</span>
+      </div>
     </div>
   );
 }

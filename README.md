@@ -78,7 +78,41 @@ Manual end-to-end verification:
 3. Import one local mp3 in `Song Library`.
 4. Open `Recommendations` and confirm imported songs are included.
 
-## What was implemented (current milestone)
+## Changelog
+
+### v0.2.0 — UX Redesign, Bug Fixes & Branding
+
+**UX Overhaul**
+- Complete frontend redesign with modern card-based layout
+- 5-page tab navigation: Home, Test Live, Result, Song Library, Recommendations
+- Circular hold-progress ring for note detection (replaces bar)
+- 3-step visual stepper for the range test flow
+- Piano keyboard visualization on the Result page
+- Song recommendation cards with fit badges, key shift indicators, and expandable detail panels
+- Filter chips for recommendation categories (Great Fit / Singable / Challenging)
+- Collapsible debug panel for technical pitch data
+
+**Morandi Color Scheme**
+- App-wide color palette aligned to the new icon: dusty blue, mauve, and blush tones
+- Custom app icon (Morandi Dusty Blue + Blush pill mic with symmetric EQ bars)
+- Icon generation pipeline: `tools/generate-icon.mjs` (SVG → sharp → png-to-ico)
+
+**Bug Fixes — Frontend**
+- Fixed polling race condition: added `pollInFlightRef` guard to prevent overlapping async polls
+- Fixed stale closure in device listing: `selectedDeviceIdRef` keeps device ID in sync
+- Added error handling for all `invoke()` calls with user-facing status messages
+
+**Bug Fixes — Rust Backend**
+- Replaced `if let Ok(...)` mutex access with `match` + `eprintln!` on poisoned mutex (4 sites in main.rs)
+- Added error logging for analyzer thread panics on `handle.join()`
+- Extracted `build_recommendation()` and `sort_recommendations()` helpers to eliminate duplicated recommendation loop in `songs/mod.rs`
+- Fixed `for song in songs` to `for song in &songs` to avoid move error in fallback path
+
+**Build & Config**
+- Added `bundle.icon` to `tauri.conf.json` for proper icon embedding
+- Added `sharp` and `png-to-ico` as dev dependencies for icon generation
+
+### v0.1.0 — Initial Release
 
 - Built Tauri v2 + React + Vite (TypeScript) desktop skeleton (Windows-first).
 - Added pages: `Home`, `Test Live`, `Result`, `Song Library`, `Recommendations`.

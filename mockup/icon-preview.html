@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MyPitch Icon Preview</title>
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #1a1a2e;
+    font-family: system-ui, sans-serif;
+    color: #e0e0e0;
+    gap: 40px;
+  }
+  h1 { margin: 0; font-weight: 300; letter-spacing: 2px; }
+  .row {
+    display: flex;
+    gap: 48px;
+    align-items: end;
+  }
+  .preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .preview span {
+    font-size: 13px;
+    opacity: 0.6;
+  }
+  .bg-white {
+    background: #fff;
+    border-radius: 20%;
+    padding: 8px;
+  }
+  .bg-dark {
+    background: #16213e;
+    border-radius: 20%;
+    padding: 8px;
+  }
+</style>
+</head>
+<body>
+  <h1>MyPitch — Icon Concepts</h1>
+
+  <!-- === CONCEPT A: Mic + Pitch Wave === -->
+  <h2 style="margin:0;opacity:0.7">Concept A — Mic & Wave</h2>
+  <div class="row">
+    <div class="preview">
+      <div class="bg-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+          <defs>
+            <linearGradient id="bgA" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#0f3460"/>
+              <stop offset="100%" stop-color="#16213e"/>
+            </linearGradient>
+            <linearGradient id="micGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#4fc3f7"/>
+              <stop offset="100%" stop-color="#0288d1"/>
+            </linearGradient>
+            <linearGradient id="waveGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#00bcd4"/>
+              <stop offset="100%" stop-color="#4fc3f7"/>
+            </linearGradient>
+          </defs>
+          <!-- Background -->
+          <rect width="256" height="256" rx="56" fill="url(#bgA)"/>
+          <!-- Mic body -->
+          <rect x="96" y="48" width="48" height="88" rx="24" fill="url(#micGrad)"/>
+          <!-- Mic arc -->
+          <path d="M80 108 A40 40 0 0 0 160 108" fill="none" stroke="#4fc3f7" stroke-width="6" stroke-linecap="round" transform="translate(0,28)"/>
+          <!-- Mic stand -->
+          <line x1="120" y1="176" x2="120" y2="200" stroke="#4fc3f7" stroke-width="6" stroke-linecap="round"/>
+          <line x1="100" y1="200" x2="140" y2="200" stroke="#4fc3f7" stroke-width="6" stroke-linecap="round"/>
+          <!-- Sound wave arcs (right side) -->
+          <path d="M168 88 Q188 120 168 152" fill="none" stroke="url(#waveGrad)" stroke-width="5" stroke-linecap="round" opacity="0.9"/>
+          <path d="M184 72 Q212 120 184 168" fill="none" stroke="url(#waveGrad)" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
+          <path d="M200 58 Q236 120 200 182" fill="none" stroke="url(#waveGrad)" stroke-width="3" stroke-linecap="round" opacity="0.3"/>
+        </svg>
+      </div>
+      <span>256px dark bg</span>
+    </div>
+
+    <div class="preview">
+      <div class="bg-white">
+        <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 256 256">
+          <defs>
+            <linearGradient id="bgA2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#0f3460"/>
+              <stop offset="100%" stop-color="#16213e"/>
+            </linearGradient>
+          </defs>
+          <rect width="256" height="256" rx="56" fill="url(#bgA2)"/>
+          <rect x="96" y="48" width="48" height="88" rx="24" fill="#4fc3f7"/>
+          <path d="M80 108 A40 40 0 0 0 160 108" fill="none" stroke="#4fc3f7" stroke-width="6" stroke-linecap="round" transform="translate(0,28)"/>
+          <line x1="120" y1="176" x2="120" y2="200" stroke="#4fc3f7" stroke-width="6" stroke-linecap="round"/>
+          <line x1="100" y1="200" x2="140" y2="200" stroke="#4fc3f7" stroke-width="6" stroke-linecap="round"/>
+          <path d="M168 88 Q188 120 168 152" fill="none" stroke="#00bcd4" stroke-width="5" stroke-linecap="round" opacity="0.9"/>
+          <path d="M184 72 Q212 120 184 168" fill="none" stroke="#00bcd4" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
+          <path d="M200 58 Q236 120 200 182" fill="none" stroke="#00bcd4" stroke-width="3" stroke-linecap="round" opacity="0.3"/>
+        </svg>
+      </div>
+      <span>128px on white</span>
+    </div>
+
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 256 256">
+        <rect width="256" height="256" rx="56" fill="#0f3460"/>
+        <rect x="96" y="48" width="48" height="88" rx="24" fill="#4fc3f7"/>
+        <path d="M80 108 A40 40 0 0 0 160 108" fill="none" stroke="#4fc3f7" stroke-width="8" stroke-linecap="round" transform="translate(0,28)"/>
+        <line x1="120" y1="176" x2="120" y2="200" stroke="#4fc3f7" stroke-width="8" stroke-linecap="round"/>
+        <line x1="100" y1="200" x2="140" y2="200" stroke="#4fc3f7" stroke-width="8" stroke-linecap="round"/>
+        <path d="M168 88 Q188 120 168 152" fill="none" stroke="#00bcd4" stroke-width="7" stroke-linecap="round" opacity="0.9"/>
+        <path d="M184 72 Q212 120 184 168" fill="none" stroke="#00bcd4" stroke-width="6" stroke-linecap="round" opacity="0.6"/>
+      </svg>
+      <span>48px (taskbar)</span>
+    </div>
+
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+        <rect width="256" height="256" rx="56" fill="#0f3460"/>
+        <rect x="88" y="44" width="56" height="96" rx="28" fill="#4fc3f7"/>
+        <path d="M76 108 A44 44 0 0 0 164 108" fill="none" stroke="#4fc3f7" stroke-width="12" stroke-linecap="round" transform="translate(0,28)"/>
+        <line x1="120" y1="180" x2="120" y2="204" stroke="#4fc3f7" stroke-width="12" stroke-linecap="round"/>
+        <path d="M172 84 Q196 120 172 156" fill="none" stroke="#00bcd4" stroke-width="10" stroke-linecap="round"/>
+      </svg>
+      <span>16px (favicon)</span>
+    </div>
+  </div>
+
+  <!-- === CONCEPT B: Tuning Fork + Note === -->
+  <h2 style="margin:0;opacity:0.7">Concept B — Pitch Circle</h2>
+  <div class="row">
+    <div class="preview">
+      <div class="bg-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+          <defs>
+            <linearGradient id="bgB" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#1a237e"/>
+              <stop offset="100%" stop-color="#0d47a1"/>
+            </linearGradient>
+            <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#00e5ff"/>
+              <stop offset="100%" stop-color="#2979ff"/>
+            </linearGradient>
+          </defs>
+          <rect width="256" height="256" rx="56" fill="url(#bgB)"/>
+          <!-- Outer ring (pitch indicator) -->
+          <circle cx="128" cy="120" r="72" fill="none" stroke="#1e3a5f" stroke-width="10"/>
+          <path d="M 128 48 A 72 72 0 1 1 56.2 122" fill="none" stroke="url(#ringGrad)" stroke-width="10" stroke-linecap="round"/>
+          <!-- Mic icon center -->
+          <rect x="112" y="88" width="32" height="56" rx="16" fill="#00e5ff"/>
+          <path d="M100 120 A28 28 0 0 0 156 120" fill="none" stroke="#00e5ff" stroke-width="4.5" stroke-linecap="round" transform="translate(0,18)"/>
+          <line x1="128" y1="162" x2="128" y2="178" stroke="#00e5ff" stroke-width="4.5" stroke-linecap="round"/>
+          <line x1="114" y1="178" x2="142" y2="178" stroke="#00e5ff" stroke-width="4.5" stroke-linecap="round"/>
+          <!-- Note name -->
+          <text x="128" y="224" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="700" font-size="28" fill="#80d8ff" opacity="0.8">MyPitch</text>
+        </svg>
+      </div>
+      <span>256px dark bg</span>
+    </div>
+
+    <div class="preview">
+      <div class="bg-white">
+        <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 256 256">
+          <defs>
+            <linearGradient id="bgB2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#1a237e"/>
+              <stop offset="100%" stop-color="#0d47a1"/>
+            </linearGradient>
+            <linearGradient id="ringGrad2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#00e5ff"/>
+              <stop offset="100%" stop-color="#2979ff"/>
+            </linearGradient>
+          </defs>
+          <rect width="256" height="256" rx="56" fill="url(#bgB2)"/>
+          <circle cx="128" cy="128" r="80" fill="none" stroke="#1e3a5f" stroke-width="10"/>
+          <path d="M 128 48 A 80 80 0 1 1 48.4 130" fill="none" stroke="url(#ringGrad2)" stroke-width="10" stroke-linecap="round"/>
+          <rect x="110" y="92" width="36" height="62" rx="18" fill="#00e5ff"/>
+          <path d="M96 126 A32 32 0 0 0 160 126" fill="none" stroke="#00e5ff" stroke-width="5" stroke-linecap="round" transform="translate(0,20)"/>
+          <line x1="128" y1="170" x2="128" y2="190" stroke="#00e5ff" stroke-width="5" stroke-linecap="round"/>
+          <line x1="112" y1="190" x2="144" y2="190" stroke="#00e5ff" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span>128px on white</span>
+    </div>
+
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 256 256">
+        <rect width="256" height="256" rx="56" fill="#1a237e"/>
+        <circle cx="128" cy="128" r="80" fill="none" stroke="#1e3a5f" stroke-width="14"/>
+        <path d="M 128 48 A 80 80 0 1 1 48.4 130" fill="none" stroke="#00e5ff" stroke-width="14" stroke-linecap="round"/>
+        <rect x="106" y="88" width="44" height="68" rx="22" fill="#00e5ff"/>
+        <path d="M92 126 A36 36 0 0 0 164 126" fill="none" stroke="#00e5ff" stroke-width="7" stroke-linecap="round" transform="translate(0,20)"/>
+        <line x1="128" y1="172" x2="128" y2="194" stroke="#00e5ff" stroke-width="7" stroke-linecap="round"/>
+      </svg>
+      <span>48px (taskbar)</span>
+    </div>
+
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+        <rect width="256" height="256" rx="56" fill="#1a237e"/>
+        <circle cx="128" cy="128" r="76" fill="none" stroke="#1e3a5f" stroke-width="20"/>
+        <path d="M 128 52 A 76 76 0 1 1 52.8 130" fill="none" stroke="#00e5ff" stroke-width="20" stroke-linecap="round"/>
+        <rect x="100" y="84" width="56" height="76" rx="28" fill="#00e5ff"/>
+      </svg>
+      <span>16px (favicon)</span>
+    </div>
+  </div>
+
+  <!-- === CONCEPT C: Gradient Mic Minimal === -->
+  <h2 style="margin:0;opacity:0.7">Concept C — Vibrant Gradient</h2>
+  <div class="row">
+    <div class="preview">
+      <div class="bg-dark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+          <defs>
+            <linearGradient id="bgC" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#0a1628"/>
+              <stop offset="100%" stop-color="#1b2838"/>
+            </linearGradient>
+            <linearGradient id="micC" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#00e5ff"/>
+              <stop offset="40%" stop-color="#2979ff"/>
+              <stop offset="100%" stop-color="#7c4dff"/>
+            </linearGradient>
+          </defs>
+          <rect width="256" height="256" rx="56" fill="url(#bgC)"/>
+          <!-- Large mic body -->
+          <rect x="88" y="40" width="64" height="104" rx="32" fill="url(#micC)"/>
+          <!-- Mic grille lines -->
+          <line x1="100" y1="64" x2="152" y2="64" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <line x1="100" y1="76" x2="152" y2="76" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <line x1="100" y1="88" x2="152" y2="88" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <line x1="100" y1="100" x2="152" y2="100" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <line x1="100" y1="112" x2="152" y2="112" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <!-- Arc -->
+          <path d="M72 116 A48 48 0 0 0 168 116" fill="none" stroke="#7c4dff" stroke-width="6" stroke-linecap="round" transform="translate(0,32)"/>
+          <!-- Stand -->
+          <line x1="120" y1="196" x2="120" y2="216" stroke="#7c4dff" stroke-width="6" stroke-linecap="round"/>
+          <line x1="96" y1="216" x2="144" y2="216" stroke="#7c4dff" stroke-width="6" stroke-linecap="round"/>
+          <!-- Frequency bars (left) -->
+          <rect x="32" y="108" width="6" height="32" rx="3" fill="#00e5ff" opacity="0.4"/>
+          <rect x="44" y="88" width="6" height="72" rx="3" fill="#00e5ff" opacity="0.6"/>
+          <rect x="56" y="96" width="6" height="56" rx="3" fill="#2979ff" opacity="0.5"/>
+          <!-- Frequency bars (right) -->
+          <rect x="178" y="96" width="6" height="56" rx="3" fill="#2979ff" opacity="0.5"/>
+          <rect x="190" y="88" width="6" height="72" rx="3" fill="#7c4dff" opacity="0.6"/>
+          <rect x="202" y="108" width="6" height="32" rx="3" fill="#7c4dff" opacity="0.4"/>
+        </svg>
+      </div>
+      <span>256px dark bg</span>
+    </div>
+
+    <div class="preview">
+      <div class="bg-white">
+        <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 256 256">
+          <defs>
+            <linearGradient id="bgC2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#0a1628"/>
+              <stop offset="100%" stop-color="#1b2838"/>
+            </linearGradient>
+            <linearGradient id="micC2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#00e5ff"/>
+              <stop offset="40%" stop-color="#2979ff"/>
+              <stop offset="100%" stop-color="#7c4dff"/>
+            </linearGradient>
+          </defs>
+          <rect width="256" height="256" rx="56" fill="url(#bgC2)"/>
+          <rect x="88" y="40" width="64" height="104" rx="32" fill="url(#micC2)"/>
+          <line x1="100" y1="64" x2="152" y2="64" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <line x1="100" y1="76" x2="152" y2="76" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <line x1="100" y1="88" x2="152" y2="88" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <line x1="100" y1="100" x2="152" y2="100" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <line x1="100" y1="112" x2="152" y2="112" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <path d="M72 116 A48 48 0 0 0 168 116" fill="none" stroke="#7c4dff" stroke-width="6" stroke-linecap="round" transform="translate(0,32)"/>
+          <line x1="120" y1="196" x2="120" y2="216" stroke="#7c4dff" stroke-width="6" stroke-linecap="round"/>
+          <line x1="96" y1="216" x2="144" y2="216" stroke="#7c4dff" stroke-width="6" stroke-linecap="round"/>
+          <rect x="32" y="108" width="6" height="32" rx="3" fill="#00e5ff" opacity="0.4"/>
+          <rect x="44" y="88" width="6" height="72" rx="3" fill="#00e5ff" opacity="0.6"/>
+          <rect x="56" y="96" width="6" height="56" rx="3" fill="#2979ff" opacity="0.5"/>
+          <rect x="178" y="96" width="6" height="56" rx="3" fill="#2979ff" opacity="0.5"/>
+          <rect x="190" y="88" width="6" height="72" rx="3" fill="#7c4dff" opacity="0.6"/>
+          <rect x="202" y="108" width="6" height="32" rx="3" fill="#7c4dff" opacity="0.4"/>
+        </svg>
+      </div>
+      <span>128px on white</span>
+    </div>
+
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 256 256">
+        <defs>
+          <linearGradient id="micC3" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#00e5ff"/>
+            <stop offset="100%" stop-color="#7c4dff"/>
+          </linearGradient>
+        </defs>
+        <rect width="256" height="256" rx="56" fill="#0a1628"/>
+        <rect x="84" y="36" width="72" height="112" rx="36" fill="url(#micC3)"/>
+        <path d="M68 116 A52 52 0 0 0 172 116" fill="none" stroke="#7c4dff" stroke-width="8" stroke-linecap="round" transform="translate(0,32)"/>
+        <line x1="120" y1="196" x2="120" y2="218" stroke="#7c4dff" stroke-width="8" stroke-linecap="round"/>
+        <rect x="40" y="100" width="8" height="48" rx="4" fill="#00e5ff" opacity="0.5"/>
+        <rect x="56" y="84" width="8" height="80" rx="4" fill="#2979ff" opacity="0.5"/>
+        <rect x="176" y="84" width="8" height="80" rx="4" fill="#2979ff" opacity="0.5"/>
+        <rect x="192" y="100" width="8" height="48" rx="4" fill="#7c4dff" opacity="0.5"/>
+      </svg>
+      <span>48px (taskbar)</span>
+    </div>
+
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+        <defs>
+          <linearGradient id="micC4" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#00e5ff"/>
+            <stop offset="100%" stop-color="#7c4dff"/>
+          </linearGradient>
+        </defs>
+        <rect width="256" height="256" rx="56" fill="#0a1628"/>
+        <rect x="80" y="32" width="80" height="120" rx="40" fill="url(#micC4)"/>
+        <path d="M64 116 A56 56 0 0 0 176 116" fill="none" stroke="#7c4dff" stroke-width="14" stroke-linecap="round" transform="translate(0,32)"/>
+      </svg>
+      <span>16px (favicon)</span>
+    </div>
+  </div>
+
+  <p style="opacity:0.4;margin-top:40px">Open this file in a browser to preview. Pick a concept and I'll generate the .ico file.</p>
+</body>
+</html>

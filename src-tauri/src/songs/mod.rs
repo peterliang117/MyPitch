@@ -160,21 +160,74 @@ fn pick_shift_relaxed(song: &SongEntry, user_low: i32, user_high: i32, comfort_h
     best_shift
 }
 
+fn build_recommendation(
+    song: &SongEntry,
+    shift: i32,
+    user_low_midi: i32,
+    user_high_midi: i32,
+    comfort_high_midi: i32,
+) -> SongRecommendation {
+    let fit_detail = compute_fit_detail(
+        shift,
+        user_low_midi,
+        user_high_midi,
+        comfort_high_midi,
+        song.melody_low_midi,
+        song.melody_high_midi,
+        song.chorus_high_midi,
+        song.high_note_count,
+        song.high_note_max_midi,
+        song.high_note_total_ms,
+    );
+    let fit_score = fit_detail.total_score.round() as i32;
+
+    SongRecommendation {
+        title: song.title.clone(),
+        artist: song.artist.clone(),
+        shift,
+        fit_score,
+        fit_detail,
+        original_low_midi: song.melody_low_midi,
+        original_high_midi: song.melody_high_midi,
+        original_chorus_low_midi: song.chorus_low_midi,
+        original_chorus_high_midi: song.chorus_high_midi,
+        shifted_low_midi: song.melody_low_midi + shift,
+        shifted_high_midi: song.melody_high_midi + shift,
+        shifted_chorus_low_midi: song.chorus_low_midi + shift,
+        shifted_chorus_high_midi: song.chorus_high_midi + shift,
+        is_original_key: shift == 0,
+        is_imported: song.is_imported,
+    }
+}
+
+fn sort_recommendations(recs: &mut [SongRecommendation]) {
+    recs.sort_by(|a, b| {
+        b.fit_detail
+            .total_score
+            .total_cmp(&a.fit_detail.total_score)
+            .then(a.shift.abs().cmp(&b.shift.abs()))
+            .then(
+                (a.shifted_high_midi - a.shifted_low_midi)
+                    .cmp(&(b.shifted_high_midi - b.shifted_low_midi)),
+            )
+    });
+}
+
 pub fn recommend_songs_internal(
     user_low_midi: i32,
     user_high_midi: i32,
-    comfort_low_midi: i32,
+    _comfort_low_midi: i32,
     comfort_high_midi: i32,
 ) -> Vec<SongRecommendation> {
     let songs = parse_song_library();
     let mut recs: Vec<SongRecommendation> = Vec::new();
 
-    for song in songs {
+    for song in &songs {
         let shift = if song.is_imported {
-            pick_shift(&song, user_low_midi, user_high_midi, comfort_high_midi)
-                .unwrap_or_else(|| pick_shift_relaxed(&song, user_low_midi, user_high_midi, comfort_high_midi))
+            pick_shift(song, user_low_midi, user_high_midi, comfort_high_midi)
+                .unwrap_or_else(|| pick_shift_relaxed(song, user_low_midi, user_high_midi, comfort_high_midi))
         } else {
-            let Some(shift) = pick_shift(&song, user_low_midi, user_high_midi, comfort_high_midi) else {
+            let Some(shift) = pick_shift(song, user_low_midi, user_high_midi, comfort_high_midi) else {
                 continue;
             };
             shift
@@ -187,101 +240,19 @@ pub fn recommend_songs_internal(
             continue;
         }
 
-        let fit_detail = compute_fit_detail(
-            shift,
-            user_low_midi,
-            user_high_midi,
-            comfort_high_midi,
-            song.melody_low_midi,
-            song.melody_high_midi,
-            song.chorus_high_midi,
-            song.high_note_count,
-            song.high_note_max_midi,
-            song.high_note_total_ms,
-        );
-
-        let fit_score = fit_detail.total_score.round() as i32;
-
-        recs.push(SongRecommendation {
-            title: song.title,
-            artist: song.artist,
-            shift,
-            fit_score,
-            fit_detail,
-            original_low_midi: song.melody_low_midi,
-            original_high_midi: song.melody_high_midi,
-            original_chorus_low_midi: song.chorus_low_midi,
-            original_chorus_high_midi: song.chorus_high_midi,
-            shifted_low_midi: song.melody_low_midi + shift,
-            shifted_high_midi: song.melody_high_midi + shift,
-            shifted_chorus_low_midi: song.chorus_low_midi + shift,
-            shifted_chorus_high_midi: song.chorus_high_midi + shift,
-            is_original_key: shift == 0,
-            is_imported: song.is_imported,
-        });
+        recs.push(build_recommendation(song, shift, user_low_midi, user_high_midi, comfort_high_midi));
     }
 
-    recs.sort_by(|a, b| {
-        b.fit_detail
-            .total_score
-            .total_cmp(&a.fit_detail.total_score)
-            .then(a.shift.abs().cmp(&b.shift.abs()))
-            .then(
-                (a.shifted_high_midi - a.shifted_low_midi)
-                    .cmp(&(b.shifted_high_midi - b.shifted_low_midi)),
-            )
-    });
+    sort_recommendations(&mut recs);
 
     if recs.is_empty() {
-        let songs = parse_song_library();
-        for song in songs {
-            let shift = pick_shift_relaxed(&song, user_low_midi, user_high_midi, comfort_high_midi);
-            let fit_detail = compute_fit_detail(
-                shift,
-                user_low_midi,
-                user_high_midi,
-                comfort_high_midi,
-                song.melody_low_midi,
-                song.melody_high_midi,
-                song.chorus_high_midi,
-                song.high_note_count,
-                song.high_note_max_midi,
-                song.high_note_total_ms,
-            );
-            let fit_score = fit_detail.total_score.round() as i32;
-
-            recs.push(SongRecommendation {
-                title: song.title,
-                artist: song.artist,
-                shift,
-                fit_score,
-                fit_detail,
-                original_low_midi: song.melody_low_midi,
-                original_high_midi: song.melody_high_midi,
-                original_chorus_low_midi: song.chorus_low_midi,
-                original_chorus_high_midi: song.chorus_high_midi,
-                shifted_low_midi: song.melody_low_midi + shift,
-                shifted_high_midi: song.melody_high_midi + shift,
-                shifted_chorus_low_midi: song.chorus_low_midi + shift,
-                shifted_chorus_high_midi: song.chorus_high_midi + shift,
-                is_original_key: shift == 0,
-                is_imported: song.is_imported,
-            });
+        for song in &songs {
+            let shift = pick_shift_relaxed(song, user_low_midi, user_high_midi, comfort_high_midi);
+            recs.push(build_recommendation(song, shift, user_low_midi, user_high_midi, comfort_high_midi));
         }
-
-        recs.sort_by(|a, b| {
-            b.fit_detail
-                .total_score
-                .total_cmp(&a.fit_detail.total_score)
-                .then(a.shift.abs().cmp(&b.shift.abs()))
-                .then(
-                    (a.shifted_high_midi - a.shifted_low_midi)
-                        .cmp(&(b.shifted_high_midi - b.shifted_low_midi)),
-                )
-        });
+        sort_recommendations(&mut recs);
     }
 
-    let _ = comfort_low_midi;
     recs
 }
 

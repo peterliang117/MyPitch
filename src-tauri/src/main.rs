@@ -167,16 +167,18 @@ fn spawn_analyzer(
 
             if let Some(pitch) = latest_pitch {
                 if pitch.frequency_hz.is_some() || pitch.confidence > 0.0 {
-                    if let Ok(mut shared) = pitch_data.lock() {
-                        *shared = pitch;
+                    match pitch_data.lock() {
+                        Ok(mut shared) => *shared = pitch,
+                        Err(e) => eprintln!("pitch_data mutex poisoned: {e}"),
                     }
                 }
             }
         }
 
         level_bits.store(0.0f32.to_bits(), Ordering::Relaxed);
-        if let Ok(mut shared) = pitch_data.lock() {
-            *shared = PitchData::default();
+        match pitch_data.lock() {
+            Ok(mut shared) => *shared = PitchData::default(),
+            Err(e) => eprintln!("pitch_data mutex poisoned on cleanup: {e}"),
         }
     })
 }
@@ -328,8 +330,9 @@ fn start_stream(
         .play()
         .map_err(|e| format!("Failed to start input stream: {e}"))?;
 
-    if let Ok(mut shared) = stream_state.pitch_data.lock() {
-        *shared = PitchData::default();
+    match stream_state.pitch_data.lock() {
+        Ok(mut shared) => *shared = PitchData::default(),
+        Err(e) => eprintln!("pitch_data mutex poisoned on start_stream: {e}"),
     }
 
     let level_bits = Arc::clone(&stream_state.level_bits);
@@ -369,7 +372,9 @@ fn stop_stream(state: tauri::State<'_, Mutex<StreamState>>) -> Result<String, St
     let _ = stream_state.stream.take();
 
     if let Some(handle) = stream_state.analyzer_handle.take() {
-        let _ = handle.join();
+        if let Err(e) = handle.join() {
+            eprintln!("analyzer thread panicked: {e:?}");
+        }
     }
 
     stream_state.current_device = None;
@@ -377,8 +382,9 @@ fn stop_stream(state: tauri::State<'_, Mutex<StreamState>>) -> Result<String, St
         .level_bits
         .store(0.0f32.to_bits(), Ordering::Relaxed);
 
-    if let Ok(mut shared) = stream_state.pitch_data.lock() {
-        *shared = PitchData::default();
+    match stream_state.pitch_data.lock() {
+        Ok(mut shared) => *shared = PitchData::default(),
+        Err(e) => eprintln!("pitch_data mutex poisoned on stop_stream: {e}"),
     }
 
     Ok("Stream stopped".to_string())

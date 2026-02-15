@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MyPitch Icon — Simplified Pill + EQ Bars</title>
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #1a1a2e;
+    font-family: system-ui, sans-serif;
+    color: #e0e0e0;
+    gap: 28px;
+    padding: 40px 20px;
+  }
+  h1 { margin: 0; font-weight: 300; letter-spacing: 2px; }
+  h2 { margin: 0; opacity: 0.7; font-weight: 400; font-size: 18px; }
+  .row {
+    display: flex;
+    gap: 24px;
+    align-items: end;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .preview span { font-size: 12px; opacity: 0.5; }
+  .bg-w { background: #fff; border-radius: 16%; padding: 4px; }
+  .divider { width: 80%; height: 1px; background: rgba(255,255,255,0.08); margin: 8px 0; }
+</style>
+</head>
+<body>
+  <h1>Simplified Pill + EQ Bars</h1>
+
+  <!-- 1. Cyan to Purple (original simplified) -->
+  <h2>1. Cyan to Purple</h2>
+  <div class="row">
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 256 256">
+        <defs>
+          <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0a1628"/><stop offset="100%" stop-color="#1b2838"/></linearGradient>
+          <linearGradient id="m1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00e5ff"/><stop offset="50%" stop-color="#2979ff"/><stop offset="100%" stop-color="#7c4dff"/></linearGradient>
+        </defs>
+        <rect width="256" height="256" rx="56" fill="url(#bg1)"/>
+        <rect x="92" y="48" width="56" height="152" rx="28" fill="url(#m1)"/>
+        <line x1="104" y1="76" x2="148" y2="76" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+        <line x1="104" y1="92" x2="148" y2="92" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+        <line x1="104" y1="108" x2="148" y2="108" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+        <line x1="104" y1="124" x2="148" y2="124" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+        <line x1="104" y1="140" x2="148" y2="140" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+        <line x1="104" y1="156" x2="148" y2="156" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+        <rect x="28" y="120" width="8" height="36" rx="4" fill="#00e5ff" opacity="0.35"/>
+        <rect x="44" y="92" width="8" height="80" rx="4" fill="#00e5ff" opacity="0.55"/>
+        <rect x="60" y="104" width="8" height="60" rx="4" fill="#2979ff" opacity="0.45"/>
+        <rect x="172" y="104" width="8" height="60" rx="4" fill="#2979ff" opacity="0.45"/>
+        <rect x="188" y="92" width="8" height="80" rx="4" fill="#7c4dff" opacity="0.55"/>
+        <rect x="204" y="120" width="8" height="36" rx="4" fill="#7c4dff" opacity="0.35"/>
+      </svg>
+      <span>160px</span>
+    </div>
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 256 256">
+        <defs><linearGradient id="m1s" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00e5ff"/><stop offset="100%" stop-color="#7c4dff"/></linearGradient></defs>
+        <rect width="256" height="256" rx="56" fill="#0a1628"/>
+        <rect x="88" y="44" width="64" height="160" rx="32" fill="url(#m1s)"/>
+        <rect x="36" y="108" width="10" height="52" rx="5" fill="#00e5ff" opacity="0.5"/>
+        <rect x="56" y="84" width="10" height="96" rx="5" fill="#2979ff" opacity="0.5"/>
+        <rect x="174" y="84" width="10" height="96" rx="5" fill="#2979ff" opacity="0.5"/>
+        <rect x="194" y="108" width="10" height="52" rx="5" fill="#7c4dff" opacity="0.5"/>
+      </svg>
+      <span>48px</span>
+    </div>
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+        <defs><linearGradient id="m1f" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00e5ff"/><stop offset="100%" stop-color="#7c4dff"/></linearGradient></defs>
+        <rect width="256" height="256" rx="56" fill="#0a1628"/>
+        <rect x="80" y="36" width="80" height="176" rx="40" fill="url(#m1f)"/>
+      </svg>
+      <span>16px</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 2. Sunset (Orange to Pink) -->
+  <h2>2. Sunset</h2>
+  <div class="row">
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 256 256">
+        <defs>
+          <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a0a1e"/><stop offset="100%" stop-color="#2a1232"/></linearGradient>
+          <linearGradient id="m2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffab40"/><stop offset="50%" stop-color="#ff6e40"/><stop offset="100%" stop-color="#f50057"/></linearGradient>
+        </defs>
+        <rect width="256" height="256" rx="56" fill="url(#bg2)"/>
+        <rect x="92" y="48" width="56" height="152" rx="28" fill="url(#m2)"/>
+        <line x1="104" y1="76" x2="148" y2="76" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="104" y1="92" x2="148" y2="92" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="104" y1="108" x2="148" y2="108" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="104" y1="124" x2="148" y2="124" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="104" y1="140" x2="148" y2="140" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="104" y1="156" x2="148" y2="156" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+        <rect x="28" y="120" width="8" height="36" rx="4" fill="#ffab40" opacity="0.35"/><rect x="44" y="92" width="8" height="80" rx="4" fill="#ffab40" opacity="0.55"/><rect x="60" y="104" width="8" height="60" rx="4" fill="#ff6e40" opacity="0.45"/>
+        <rect x="172" y="104" width="8" height="60" rx="4" fill="#ff6e40" opacity="0.45"/><rect x="188" y="92" width="8" height="80" rx="4" fill="#f50057" opacity="0.55"/><rect x="204" y="120" width="8" height="36" rx="4" fill="#f50057" opacity="0.35"/>
+      </svg>
+      <span>160px</span>
+    </div>
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 256 256">
+        <defs><linearGradient id="m2s" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffab40"/><stop offset="100%" stop-color="#f50057"/></linearGradient></defs>
+        <rect width="256" height="256" rx="56" fill="#1a0a1e"/>
+        <rect x="88" y="44" width="64" height="160" rx="32" fill="url(#m2s)"/>
+        <rect x="36" y="108" width="10" height="52" rx="5" fill="#ffab40" opacity="0.5"/><rect x="56" y="84" width="10" height="96" rx="5" fill="#ff6e40" opacity="0.5"/>
+        <rect x="174" y="84" width="10" height="96" rx="5" fill="#ff6e40" opacity="0.5"/><rect x="194" y="108" width="10" height="52" rx="5" fill="#f50057" opacity="0.5"/>
+      </svg>
+      <span>48px</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 3. Morandi Rose -->
+  <h2>3. Morandi Rose</h2>
+  <div class="row">
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 256 256">
+        <defs>
+          <linearGradient id="bg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#2d2428"/><stop offset="100%" stop-color="#3a2c32"/></linearGradient>
+          <linearGradient id="m3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d4a0a0"/><stop offset="50%" stop-color="#c48888"/><stop offset="100%" stop-color="#8b6b6b"/></linearGradient>
+        </defs>
+        <rect width="256" height="256" rx="56" fill="url(#bg3)"/>
+        <rect x="92" y="48" width="56" height="152" rx="28" fill="url(#m3)"/>
+        <line x1="104" y1="76" x2="148" y2="76" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="92" x2="148" y2="92" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="108" x2="148" y2="108" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="124" x2="148" y2="124" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="140" x2="148" y2="140" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="156" x2="148" y2="156" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
+        <rect x="28" y="120" width="8" height="36" rx="4" fill="#d4a0a0" opacity="0.3"/><rect x="44" y="92" width="8" height="80" rx="4" fill="#d4a0a0" opacity="0.5"/><rect x="60" y="104" width="8" height="60" rx="4" fill="#c48888" opacity="0.4"/>
+        <rect x="172" y="104" width="8" height="60" rx="4" fill="#c48888" opacity="0.4"/><rect x="188" y="92" width="8" height="80" rx="4" fill="#8b6b6b" opacity="0.5"/><rect x="204" y="120" width="8" height="36" rx="4" fill="#8b6b6b" opacity="0.3"/>
+      </svg>
+      <span>160px</span>
+    </div>
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 256 256">
+        <defs><linearGradient id="m3s" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d4a0a0"/><stop offset="100%" stop-color="#8b6b6b"/></linearGradient></defs>
+        <rect width="256" height="256" rx="56" fill="#2d2428"/>
+        <rect x="88" y="44" width="64" height="160" rx="32" fill="url(#m3s)"/>
+        <rect x="36" y="108" width="10" height="52" rx="5" fill="#d4a0a0" opacity="0.45"/><rect x="56" y="84" width="10" height="96" rx="5" fill="#c48888" opacity="0.45"/>
+        <rect x="174" y="84" width="10" height="96" rx="5" fill="#c48888" opacity="0.45"/><rect x="194" y="108" width="10" height="52" rx="5" fill="#8b6b6b" opacity="0.45"/>
+      </svg>
+      <span>48px</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 4. Morandi Sage -->
+  <h2>4. Morandi Sage</h2>
+  <div class="row">
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 256 256">
+        <defs>
+          <linearGradient id="bg4" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#232b28"/><stop offset="100%" stop-color="#2a3530"/></linearGradient>
+          <linearGradient id="m4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a8bfaa"/><stop offset="50%" stop-color="#8ba88e"/><stop offset="100%" stop-color="#6b8a6e"/></linearGradient>
+        </defs>
+        <rect width="256" height="256" rx="56" fill="url(#bg4)"/>
+        <rect x="92" y="48" width="56" height="152" rx="28" fill="url(#m4)"/>
+        <line x1="104" y1="76" x2="148" y2="76" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="92" x2="148" y2="92" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="108" x2="148" y2="108" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="124" x2="148" y2="124" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="140" x2="148" y2="140" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="156" x2="148" y2="156" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
+        <rect x="28" y="120" width="8" height="36" rx="4" fill="#a8bfaa" opacity="0.3"/><rect x="44" y="92" width="8" height="80" rx="4" fill="#a8bfaa" opacity="0.5"/><rect x="60" y="104" width="8" height="60" rx="4" fill="#8ba88e" opacity="0.4"/>
+        <rect x="172" y="104" width="8" height="60" rx="4" fill="#8ba88e" opacity="0.4"/><rect x="188" y="92" width="8" height="80" rx="4" fill="#6b8a6e" opacity="0.5"/><rect x="204" y="120" width="8" height="36" rx="4" fill="#6b8a6e" opacity="0.3"/>
+      </svg>
+      <span>160px</span>
+    </div>
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 256 256">
+        <defs><linearGradient id="m4s" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a8bfaa"/><stop offset="100%" stop-color="#6b8a6e"/></linearGradient></defs>
+        <rect width="256" height="256" rx="56" fill="#232b28"/>
+        <rect x="88" y="44" width="64" height="160" rx="32" fill="url(#m4s)"/>
+        <rect x="36" y="108" width="10" height="52" rx="5" fill="#a8bfaa" opacity="0.45"/><rect x="56" y="84" width="10" height="96" rx="5" fill="#8ba88e" opacity="0.45"/>
+        <rect x="174" y="84" width="10" height="96" rx="5" fill="#8ba88e" opacity="0.45"/><rect x="194" y="108" width="10" height="52" rx="5" fill="#6b8a6e" opacity="0.45"/>
+      </svg>
+      <span>48px</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 5. Morandi Blue-Grey -->
+  <h2>5. Morandi Blue-Grey</h2>
+  <div class="row">
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 256 256">
+        <defs>
+          <linearGradient id="bg5" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#262a30"/><stop offset="100%" stop-color="#2e343c"/></linearGradient>
+          <linearGradient id="m5" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a8b4c0"/><stop offset="50%" stop-color="#8a9aaa"/><stop offset="100%" stop-color="#6a7d8e"/></linearGradient>
+        </defs>
+        <rect width="256" height="256" rx="56" fill="url(#bg5)"/>
+        <rect x="92" y="48" width="56" height="152" rx="28" fill="url(#m5)"/>
+        <line x1="104" y1="76" x2="148" y2="76" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="92" x2="148" y2="92" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="108" x2="148" y2="108" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="124" x2="148" y2="124" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="140" x2="148" y2="140" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="156" x2="148" y2="156" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
+        <rect x="28" y="120" width="8" height="36" rx="4" fill="#a8b4c0" opacity="0.3"/><rect x="44" y="92" width="8" height="80" rx="4" fill="#a8b4c0" opacity="0.5"/><rect x="60" y="104" width="8" height="60" rx="4" fill="#8a9aaa" opacity="0.4"/>
+        <rect x="172" y="104" width="8" height="60" rx="4" fill="#8a9aaa" opacity="0.4"/><rect x="188" y="92" width="8" height="80" rx="4" fill="#6a7d8e" opacity="0.5"/><rect x="204" y="120" width="8" height="36" rx="4" fill="#6a7d8e" opacity="0.3"/>
+      </svg>
+      <span>160px</span>
+    </div>
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 256 256">
+        <defs><linearGradient id="m5s" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a8b4c0"/><stop offset="100%" stop-color="#6a7d8e"/></linearGradient></defs>
+        <rect width="256" height="256" rx="56" fill="#262a30"/>
+        <rect x="88" y="44" width="64" height="160" rx="32" fill="url(#m5s)"/>
+        <rect x="36" y="108" width="10" height="52" rx="5" fill="#a8b4c0" opacity="0.45"/><rect x="56" y="84" width="10" height="96" rx="5" fill="#8a9aaa" opacity="0.45"/>
+        <rect x="174" y="84" width="10" height="96" rx="5" fill="#8a9aaa" opacity="0.45"/><rect x="194" y="108" width="10" height="52" rx="5" fill="#6a7d8e" opacity="0.45"/>
+      </svg>
+      <span>48px</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 6. Earthy Terracotta -->
+  <h2>6. Earthy Terracotta</h2>
+  <div class="row">
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 256 256">
+        <defs>
+          <linearGradient id="bg6" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#2a1e18"/><stop offset="100%" stop-color="#352618"/></linearGradient>
+          <linearGradient id="m6" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e8b89d"/><stop offset="50%" stop-color="#c4825a"/><stop offset="100%" stop-color="#8b5e3c"/></linearGradient>
+        </defs>
+        <rect width="256" height="256" rx="56" fill="url(#bg6)"/>
+        <rect x="92" y="48" width="56" height="152" rx="28" fill="url(#m6)"/>
+        <line x1="104" y1="76" x2="148" y2="76" stroke="rgba(255,255,255,0.15)" stroke-width="2"/><line x1="104" y1="92" x2="148" y2="92" stroke="rgba(255,255,255,0.15)" stroke-width="2"/><line x1="104" y1="108" x2="148" y2="108" stroke="rgba(255,255,255,0.15)" stroke-width="2"/><line x1="104" y1="124" x2="148" y2="124" stroke="rgba(255,255,255,0.15)" stroke-width="2"/><line x1="104" y1="140" x2="148" y2="140" stroke="rgba(255,255,255,0.15)" stroke-width="2"/><line x1="104" y1="156" x2="148" y2="156" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+        <rect x="28" y="120" width="8" height="36" rx="4" fill="#e8b89d" opacity="0.3"/><rect x="44" y="92" width="8" height="80" rx="4" fill="#e8b89d" opacity="0.5"/><rect x="60" y="104" width="8" height="60" rx="4" fill="#c4825a" opacity="0.4"/>
+        <rect x="172" y="104" width="8" height="60" rx="4" fill="#c4825a" opacity="0.4"/><rect x="188" y="92" width="8" height="80" rx="4" fill="#8b5e3c" opacity="0.5"/><rect x="204" y="120" width="8" height="36" rx="4" fill="#8b5e3c" opacity="0.3"/>
+      </svg>
+      <span>160px</span>
+    </div>
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 256 256">
+        <defs><linearGradient id="m6s" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e8b89d"/><stop offset="100%" stop-color="#8b5e3c"/></linearGradient></defs>
+        <rect width="256" height="256" rx="56" fill="#2a1e18"/>
+        <rect x="88" y="44" width="64" height="160" rx="32" fill="url(#m6s)"/>
+        <rect x="36" y="108" width="10" height="52" rx="5" fill="#e8b89d" opacity="0.45"/><rect x="56" y="84" width="10" height="96" rx="5" fill="#c4825a" opacity="0.45"/>
+        <rect x="174" y="84" width="10" height="96" rx="5" fill="#c4825a" opacity="0.45"/><rect x="194" y="108" width="10" height="52" rx="5" fill="#8b5e3c" opacity="0.45"/>
+      </svg>
+      <span>48px</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 7. Morandi Lavender -->
+  <h2>7. Morandi Lavender</h2>
+  <div class="row">
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 256 256">
+        <defs>
+          <linearGradient id="bg7" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#28252e"/><stop offset="100%" stop-color="#322e3a"/></linearGradient>
+          <linearGradient id="m7" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c5b3d4"/><stop offset="50%" stop-color="#a48fba"/><stop offset="100%" stop-color="#7a6890"/></linearGradient>
+        </defs>
+        <rect width="256" height="256" rx="56" fill="url(#bg7)"/>
+        <rect x="92" y="48" width="56" height="152" rx="28" fill="url(#m7)"/>
+        <line x1="104" y1="76" x2="148" y2="76" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="92" x2="148" y2="92" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="108" x2="148" y2="108" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="124" x2="148" y2="124" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="140" x2="148" y2="140" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="156" x2="148" y2="156" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
+        <rect x="28" y="120" width="8" height="36" rx="4" fill="#c5b3d4" opacity="0.3"/><rect x="44" y="92" width="8" height="80" rx="4" fill="#c5b3d4" opacity="0.5"/><rect x="60" y="104" width="8" height="60" rx="4" fill="#a48fba" opacity="0.4"/>
+        <rect x="172" y="104" width="8" height="60" rx="4" fill="#a48fba" opacity="0.4"/><rect x="188" y="92" width="8" height="80" rx="4" fill="#7a6890" opacity="0.5"/><rect x="204" y="120" width="8" height="36" rx="4" fill="#7a6890" opacity="0.3"/>
+      </svg>
+      <span>160px</span>
+    </div>
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 256 256">
+        <defs><linearGradient id="m7s" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c5b3d4"/><stop offset="100%" stop-color="#7a6890"/></linearGradient></defs>
+        <rect width="256" height="256" rx="56" fill="#28252e"/>
+        <rect x="88" y="44" width="64" height="160" rx="32" fill="url(#m7s)"/>
+        <rect x="36" y="108" width="10" height="52" rx="5" fill="#c5b3d4" opacity="0.45"/><rect x="56" y="84" width="10" height="96" rx="5" fill="#a48fba" opacity="0.45"/>
+        <rect x="174" y="84" width="10" height="96" rx="5" fill="#a48fba" opacity="0.45"/><rect x="194" y="108" width="10" height="52" rx="5" fill="#7a6890" opacity="0.45"/>
+      </svg>
+      <span>48px</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 8. Earthy Olive -->
+  <h2>8. Earthy Olive</h2>
+  <div class="row">
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 256 256">
+        <defs>
+          <linearGradient id="bg8" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1e2018"/><stop offset="100%" stop-color="#2a2c1e"/></linearGradient>
+          <linearGradient id="m8" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c8c49a"/><stop offset="50%" stop-color="#a8a270"/><stop offset="100%" stop-color="#7a7648"/></linearGradient>
+        </defs>
+        <rect width="256" height="256" rx="56" fill="url(#bg8)"/>
+        <rect x="92" y="48" width="56" height="152" rx="28" fill="url(#m8)"/>
+        <line x1="104" y1="76" x2="148" y2="76" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="92" x2="148" y2="92" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="108" x2="148" y2="108" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="124" x2="148" y2="124" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="140" x2="148" y2="140" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="156" x2="148" y2="156" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
+        <rect x="28" y="120" width="8" height="36" rx="4" fill="#c8c49a" opacity="0.3"/><rect x="44" y="92" width="8" height="80" rx="4" fill="#c8c49a" opacity="0.5"/><rect x="60" y="104" width="8" height="60" rx="4" fill="#a8a270" opacity="0.4"/>
+        <rect x="172" y="104" width="8" height="60" rx="4" fill="#a8a270" opacity="0.4"/><rect x="188" y="92" width="8" height="80" rx="4" fill="#7a7648" opacity="0.5"/><rect x="204" y="120" width="8" height="36" rx="4" fill="#7a7648" opacity="0.3"/>
+      </svg>
+      <span>160px</span>
+    </div>
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 256 256">
+        <defs><linearGradient id="m8s" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c8c49a"/><stop offset="100%" stop-color="#7a7648"/></linearGradient></defs>
+        <rect width="256" height="256" rx="56" fill="#1e2018"/>
+        <rect x="88" y="44" width="64" height="160" rx="32" fill="url(#m8s)"/>
+        <rect x="36" y="108" width="10" height="52" rx="5" fill="#c8c49a" opacity="0.45"/><rect x="56" y="84" width="10" height="96" rx="5" fill="#a8a270" opacity="0.45"/>
+        <rect x="174" y="84" width="10" height="96" rx="5" fill="#a8a270" opacity="0.45"/><rect x="194" y="108" width="10" height="52" rx="5" fill="#7a6890" opacity="0.45"/>
+      </svg>
+      <span>48px</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 9. Morandi Dusty Blue + Blush -->
+  <h2>9. Morandi Dusty Blue + Blush</h2>
+  <div class="row">
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 256 256">
+        <defs>
+          <linearGradient id="bg9" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#262830"/><stop offset="100%" stop-color="#2e2a32"/></linearGradient>
+          <linearGradient id="m9" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#93aec1"/><stop offset="50%" stop-color="#b89eaa"/><stop offset="100%" stop-color="#c4928a"/></linearGradient>
+        </defs>
+        <rect width="256" height="256" rx="56" fill="url(#bg9)"/>
+        <rect x="92" y="48" width="56" height="152" rx="28" fill="url(#m9)"/>
+        <line x1="104" y1="76" x2="148" y2="76" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="92" x2="148" y2="92" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="108" x2="148" y2="108" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="124" x2="148" y2="124" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="140" x2="148" y2="140" stroke="rgba(255,255,255,0.12)" stroke-width="2"/><line x1="104" y1="156" x2="148" y2="156" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
+        <rect x="28" y="120" width="8" height="36" rx="4" fill="#93aec1" opacity="0.3"/><rect x="44" y="92" width="8" height="80" rx="4" fill="#93aec1" opacity="0.5"/><rect x="60" y="104" width="8" height="60" rx="4" fill="#b89eaa" opacity="0.4"/>
+        <rect x="172" y="104" width="8" height="60" rx="4" fill="#b89eaa" opacity="0.4"/><rect x="188" y="92" width="8" height="80" rx="4" fill="#c4928a" opacity="0.5"/><rect x="204" y="120" width="8" height="36" rx="4" fill="#c4928a" opacity="0.3"/>
+      </svg>
+      <span>160px</span>
+    </div>
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 256 256">
+        <defs><linearGradient id="m9s" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#93aec1"/><stop offset="100%" stop-color="#c4928a"/></linearGradient></defs>
+        <rect width="256" height="256" rx="56" fill="#262830"/>
+        <rect x="88" y="44" width="64" height="160" rx="32" fill="url(#m9s)"/>
+        <rect x="36" y="108" width="10" height="52" rx="5" fill="#93aec1" opacity="0.45"/><rect x="56" y="84" width="10" height="96" rx="5" fill="#b89eaa" opacity="0.45"/>
+        <rect x="174" y="84" width="10" height="96" rx="5" fill="#b89eaa" opacity="0.45"/><rect x="194" y="108" width="10" height="52" rx="5" fill="#c4928a" opacity="0.45"/>
+      </svg>
+      <span>48px</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 10. Earthy Clay + Sand -->
+  <h2>10. Earthy Clay + Sand</h2>
+  <div class="row">
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 256 256">
+        <defs>
+          <linearGradient id="bg10" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#241e1a"/><stop offset="100%" stop-color="#302820"/></linearGradient>
+          <linearGradient id="m10" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#dcc8a0"/><stop offset="50%" stop-color="#c4a472"/><stop offset="100%" stop-color="#9e7b52"/></linearGradient>
+        </defs>
+        <rect width="256" height="256" rx="56" fill="url(#bg10)"/>
+        <rect x="92" y="48" width="56" height="152" rx="28" fill="url(#m10)"/>
+        <line x1="104" y1="76" x2="148" y2="76" stroke="rgba(255,255,255,0.15)" stroke-width="2"/><line x1="104" y1="92" x2="148" y2="92" stroke="rgba(255,255,255,0.15)" stroke-width="2"/><line x1="104" y1="108" x2="148" y2="108" stroke="rgba(255,255,255,0.15)" stroke-width="2"/><line x1="104" y1="124" x2="148" y2="124" stroke="rgba(255,255,255,0.15)" stroke-width="2"/><line x1="104" y1="140" x2="148" y2="140" stroke="rgba(255,255,255,0.15)" stroke-width="2"/><line x1="104" y1="156" x2="148" y2="156" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+        <rect x="28" y="120" width="8" height="36" rx="4" fill="#dcc8a0" opacity="0.3"/><rect x="44" y="92" width="8" height="80" rx="4" fill="#dcc8a0" opacity="0.5"/><rect x="60" y="104" width="8" height="60" rx="4" fill="#c4a472" opacity="0.4"/>
+        <rect x="172" y="104" width="8" height="60" rx="4" fill="#c4a472" opacity="0.4"/><rect x="188" y="92" width="8" height="80" rx="4" fill="#9e7b52" opacity="0.5"/><rect x="204" y="120" width="8" height="36" rx="4" fill="#9e7b52" opacity="0.3"/>
+      </svg>
+      <span>160px</span>
+    </div>
+    <div class="preview">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 256 256">
+        <defs><linearGradient id="m10s" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#dcc8a0"/><stop offset="100%" stop-color="#9e7b52"/></linearGradient></defs>
+        <rect width="256" height="256" rx="56" fill="#241e1a"/>
+        <rect x="88" y="44" width="64" height="160" rx="32" fill="url(#m10s)"/>
+        <rect x="36" y="108" width="10" height="52" rx="5" fill="#dcc8a0" opacity="0.45"/><rect x="56" y="84" width="10" height="96" rx="5" fill="#c4a472" opacity="0.45"/>
+        <rect x="174" y="84" width="10" height="96" rx="5" fill="#c4a472" opacity="0.45"/><rect x="194" y="108" width="10" height="52" rx="5" fill="#9e7b52" opacity="0.45"/>
+      </svg>
+      <span>48px</span>
+    </div>
+  </div>
+
+  <p style="opacity:0.4;margin-top:32px">Pick a number (1-10) and I'll generate the .ico file.</p>
+</body>
+</html>

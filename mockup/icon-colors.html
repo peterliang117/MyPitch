@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MyPitch Icon — Concept C Color Variants</title>
+<style>
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #1a1a2e;
+    font-family: system-ui, sans-serif;
+    color: #e0e0e0;
+    gap: 32px;
+    padding: 40px 20px;
+  }
+  h1 { margin: 0; font-weight: 300; letter-spacing: 2px; }
+  h2 { margin: 0; opacity: 0.7; font-weight: 400; }
+  .row {
+    display: flex;
+    gap: 40px;
+    align-items: end;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .preview span { font-size: 13px; opacity: 0.6; }
+  .sizes {
+    display: flex;
+    gap: 16px;
+    align-items: end;
+  }
+  .bg-w { background: #fff; border-radius: 16%; padding: 6px; }
+  .bg-d { background: #16213e; border-radius: 16%; padding: 6px; }
+</style>
+</head>
+<body>
+  <h1>Concept C — Color Variants</h1>
+
+  <!-- ORIGINAL: Cyan to Purple -->
+  <h2>1. Cyan to Purple (original)</h2>
+  <div class="row">
+    <div class="preview">
+      <div class="bg-d">
+        <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 256 256">
+          <defs>
+            <linearGradient id="bg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0a1628"/><stop offset="100%" stop-color="#1b2838"/></linearGradient>
+            <linearGradient id="mic1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00e5ff"/><stop offset="40%" stop-color="#2979ff"/><stop offset="100%" stop-color="#7c4dff"/></linearGradient>
+          </defs>
+          <rect width="256" height="256" rx="56" fill="url(#bg1)"/>
+          <rect x="88" y="40" width="64" height="104" rx="32" fill="url(#mic1)"/>
+          <line x1="100" y1="64" x2="152" y2="64" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <line x1="100" y1="76" x2="152" y2="76" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <line x1="100" y1="88" x2="152" y2="88" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <line x1="100" y1="100" x2="152" y2="100" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <line x1="100" y1="112" x2="152" y2="112" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <path d="M72 116 A48 48 0 0 0 168 116" fill="none" stroke="#7c4dff" stroke-width="6" stroke-linecap="round" transform="translate(0,32)"/>
+          <line x1="120" y1="196" x2="120" y2="216" stroke="#7c4dff" stroke-width="6" stroke-linecap="round"/>
+          <line x1="96" y1="216" x2="144" y2="216" stroke="#7c4dff" stroke-width="6" stroke-linecap="round"/>
+          <rect x="32" y="108" width="6" height="32" rx="3" fill="#00e5ff" opacity="0.4"/>
+          <rect x="44" y="88" width="6" height="72" rx="3" fill="#00e5ff" opacity="0.6"/>
+          <rect x="56" y="96" width="6" height="56" rx="3" fill="#2979ff" opacity="0.5"/>
+          <rect x="178" y="96" width="6" height="56" rx="3" fill="#2979ff" opacity="0.5"/>
+          <rect x="190" y="88" width="6" height="72" rx="3" fill="#7c4dff" opacity="0.6"/>
+          <rect x="202" y="108" width="6" height="32" rx="3" fill="#7c4dff" opacity="0.4"/>
+        </svg>
+      </div>
+      <span>Original</span>
+    </div>
+    <div class="sizes">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 256 256">
+        <defs><linearGradient id="mic1s" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00e5ff"/><stop offset="100%" stop-color="#7c4dff"/></linearGradient></defs>
+        <rect width="256" height="256" rx="56" fill="#0a1628"/>
+        <rect x="84" y="36" width="72" height="112" rx="36" fill="url(#mic1s)"/>
+        <path d="M68 116 A52 52 0 0 0 172 116" fill="none" stroke="#7c4dff" stroke-width="8" stroke-linecap="round" transform="translate(0,32)"/>
+        <line x1="120" y1="196" x2="120" y2="218" stroke="#7c4dff" stroke-width="8" stroke-linecap="round"/>
+        <rect x="40" y="100" width="8" height="48" rx="4" fill="#00e5ff" opacity="0.5"/>
+        <rect x="56" y="84" width="8" height="80" rx="4" fill="#2979ff" opacity="0.5"/>
+        <rect x="176" y="84" width="8" height="80" rx="4" fill="#2979ff" opacity="0.5"/>
+        <rect x="192" y="100" width="8" height="48" rx="4" fill="#7c4dff" opacity="0.5"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 2. Sunset Orange to Pink -->
+  <h2>2. Sunset (Orange to Hot Pink)</h2>
+  <div class="row">
+    <div class="preview">
+      <div class="bg-d">
+        <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 256 256">
+          <defs>
+            <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a0a1e"/><stop offset="100%" stop-color="#2a1232"/></linearGradient>
+            <linearGradient id="mic2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffab40"/><stop offset="40%" stop-color="#ff6e40"/><stop offset="100%" stop-color="#f50057"/></linearGradient>
+          </defs>
+          <rect width="256" height="256" rx="56" fill="url(#bg2)"/>
+          <rect x="88" y="40" width="64" height="104" rx="32" fill="url(#mic2)"/>
+          <line x1="100" y1="64" x2="152" y2="64" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <line x1="100" y1="76" x2="152" y2="76" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <line x1="100" y1="88" x2="152" y2="88" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <line x1="100" y1="100" x2="152" y2="100" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <line x1="100" y1="112" x2="152" y2="112" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <path d="M72 116 A48 48 0 0 0 168 116" fill="none" stroke="#f50057" stroke-width="6" stroke-linecap="round" transform="translate(0,32)"/>
+          <line x1="120" y1="196" x2="120" y2="216" stroke="#f50057" stroke-width="6" stroke-linecap="round"/>
+          <line x1="96" y1="216" x2="144" y2="216" stroke="#f50057" stroke-width="6" stroke-linecap="round"/>
+          <rect x="32" y="108" width="6" height="32" rx="3" fill="#ffab40" opacity="0.4"/>
+          <rect x="44" y="88" width="6" height="72" rx="3" fill="#ffab40" opacity="0.6"/>
+          <rect x="56" y="96" width="6" height="56" rx="3" fill="#ff6e40" opacity="0.5"/>
+          <rect x="178" y="96" width="6" height="56" rx="3" fill="#ff6e40" opacity="0.5"/>
+          <rect x="190" y="88" width="6" height="72" rx="3" fill="#f50057" opacity="0.6"/>
+          <rect x="202" y="108" width="6" height="32" rx="3" fill="#f50057" opacity="0.4"/>
+        </svg>
+      </div>
+      <span>Dark bg</span>
+    </div>
+    <div class="preview">
+      <div class="bg-w">
+        <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 256 256">
+          <defs>
+            <linearGradient id="bg2w" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a0a1e"/><stop offset="100%" stop-color="#2a1232"/></linearGradient>
+            <linearGradient id="mic2w" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffab40"/><stop offset="40%" stop-color="#ff6e40"/><stop offset="100%" stop-color="#f50057"/></linearGradient>
+          </defs>
+          <rect width="256" height="256" rx="56" fill="url(#bg2w)"/>
+          <rect x="88" y="40" width="64" height="104" rx="32" fill="url(#mic2w)"/>
+          <line x1="100" y1="64" x2="152" y2="64" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="76" x2="152" y2="76" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="88" x2="152" y2="88" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="100" x2="152" y2="100" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="112" x2="152" y2="112" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <path d="M72 116 A48 48 0 0 0 168 116" fill="none" stroke="#f50057" stroke-width="6" stroke-linecap="round" transform="translate(0,32)"/>
+          <line x1="120" y1="196" x2="120" y2="216" stroke="#f50057" stroke-width="6" stroke-linecap="round"/><line x1="96" y1="216" x2="144" y2="216" stroke="#f50057" stroke-width="6" stroke-linecap="round"/>
+          <rect x="32" y="108" width="6" height="32" rx="3" fill="#ffab40" opacity="0.4"/><rect x="44" y="88" width="6" height="72" rx="3" fill="#ffab40" opacity="0.6"/><rect x="56" y="96" width="6" height="56" rx="3" fill="#ff6e40" opacity="0.5"/>
+          <rect x="178" y="96" width="6" height="56" rx="3" fill="#ff6e40" opacity="0.5"/><rect x="190" y="88" width="6" height="72" rx="3" fill="#f50057" opacity="0.6"/><rect x="202" y="108" width="6" height="32" rx="3" fill="#f50057" opacity="0.4"/>
+        </svg>
+      </div>
+      <span>On white</span>
+    </div>
+    <div class="sizes">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 256 256">
+        <defs><linearGradient id="mic2s" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffab40"/><stop offset="100%" stop-color="#f50057"/></linearGradient></defs>
+        <rect width="256" height="256" rx="56" fill="#1a0a1e"/>
+        <rect x="84" y="36" width="72" height="112" rx="36" fill="url(#mic2s)"/>
+        <path d="M68 116 A52 52 0 0 0 172 116" fill="none" stroke="#f50057" stroke-width="8" stroke-linecap="round" transform="translate(0,32)"/>
+        <line x1="120" y1="196" x2="120" y2="218" stroke="#f50057" stroke-width="8" stroke-linecap="round"/>
+        <rect x="40" y="100" width="8" height="48" rx="4" fill="#ffab40" opacity="0.5"/><rect x="56" y="84" width="8" height="80" rx="4" fill="#ff6e40" opacity="0.5"/>
+        <rect x="176" y="84" width="8" height="80" rx="4" fill="#ff6e40" opacity="0.5"/><rect x="192" y="100" width="8" height="48" rx="4" fill="#f50057" opacity="0.5"/>
+      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+        <defs><linearGradient id="mic2f" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffab40"/><stop offset="100%" stop-color="#f50057"/></linearGradient></defs>
+        <rect width="256" height="256" rx="56" fill="#1a0a1e"/>
+        <rect x="80" y="32" width="80" height="120" rx="40" fill="url(#mic2f)"/>
+        <path d="M64 116 A56 56 0 0 0 176 116" fill="none" stroke="#f50057" stroke-width="14" stroke-linecap="round" transform="translate(0,32)"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 3. Emerald to Teal -->
+  <h2>3. Emerald (Green to Teal)</h2>
+  <div class="row">
+    <div class="preview">
+      <div class="bg-d">
+        <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 256 256">
+          <defs>
+            <linearGradient id="bg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0a1a14"/><stop offset="100%" stop-color="#0d2818"/></linearGradient>
+            <linearGradient id="mic3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#69f0ae"/><stop offset="40%" stop-color="#00e676"/><stop offset="100%" stop-color="#00bfa5"/></linearGradient>
+          </defs>
+          <rect width="256" height="256" rx="56" fill="url(#bg3)"/>
+          <rect x="88" y="40" width="64" height="104" rx="32" fill="url(#mic3)"/>
+          <line x1="100" y1="64" x2="152" y2="64" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="76" x2="152" y2="76" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="88" x2="152" y2="88" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="100" x2="152" y2="100" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="112" x2="152" y2="112" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <path d="M72 116 A48 48 0 0 0 168 116" fill="none" stroke="#00bfa5" stroke-width="6" stroke-linecap="round" transform="translate(0,32)"/>
+          <line x1="120" y1="196" x2="120" y2="216" stroke="#00bfa5" stroke-width="6" stroke-linecap="round"/><line x1="96" y1="216" x2="144" y2="216" stroke="#00bfa5" stroke-width="6" stroke-linecap="round"/>
+          <rect x="32" y="108" width="6" height="32" rx="3" fill="#69f0ae" opacity="0.4"/><rect x="44" y="88" width="6" height="72" rx="3" fill="#69f0ae" opacity="0.6"/><rect x="56" y="96" width="6" height="56" rx="3" fill="#00e676" opacity="0.5"/>
+          <rect x="178" y="96" width="6" height="56" rx="3" fill="#00e676" opacity="0.5"/><rect x="190" y="88" width="6" height="72" rx="3" fill="#00bfa5" opacity="0.6"/><rect x="202" y="108" width="6" height="32" rx="3" fill="#00bfa5" opacity="0.4"/>
+        </svg>
+      </div>
+      <span>Dark bg</span>
+    </div>
+    <div class="preview">
+      <div class="bg-w">
+        <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 256 256">
+          <defs>
+            <linearGradient id="bg3w" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0a1a14"/><stop offset="100%" stop-color="#0d2818"/></linearGradient>
+            <linearGradient id="mic3w" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#69f0ae"/><stop offset="40%" stop-color="#00e676"/><stop offset="100%" stop-color="#00bfa5"/></linearGradient>
+          </defs>
+          <rect width="256" height="256" rx="56" fill="url(#bg3w)"/>
+          <rect x="88" y="40" width="64" height="104" rx="32" fill="url(#mic3w)"/>
+          <line x1="100" y1="64" x2="152" y2="64" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="76" x2="152" y2="76" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="88" x2="152" y2="88" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="100" x2="152" y2="100" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="112" x2="152" y2="112" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <path d="M72 116 A48 48 0 0 0 168 116" fill="none" stroke="#00bfa5" stroke-width="6" stroke-linecap="round" transform="translate(0,32)"/>
+          <line x1="120" y1="196" x2="120" y2="216" stroke="#00bfa5" stroke-width="6" stroke-linecap="round"/><line x1="96" y1="216" x2="144" y2="216" stroke="#00bfa5" stroke-width="6" stroke-linecap="round"/>
+          <rect x="32" y="108" width="6" height="32" rx="3" fill="#69f0ae" opacity="0.4"/><rect x="44" y="88" width="6" height="72" rx="3" fill="#69f0ae" opacity="0.6"/><rect x="56" y="96" width="6" height="56" rx="3" fill="#00e676" opacity="0.5"/>
+          <rect x="178" y="96" width="6" height="56" rx="3" fill="#00e676" opacity="0.5"/><rect x="190" y="88" width="6" height="72" rx="3" fill="#00bfa5" opacity="0.6"/><rect x="202" y="108" width="6" height="32" rx="3" fill="#00bfa5" opacity="0.4"/>
+        </svg>
+      </div>
+      <span>On white</span>
+    </div>
+    <div class="sizes">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 256 256">
+        <defs><linearGradient id="mic3s" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#69f0ae"/><stop offset="100%" stop-color="#00bfa5"/></linearGradient></defs>
+        <rect width="256" height="256" rx="56" fill="#0a1a14"/>
+        <rect x="84" y="36" width="72" height="112" rx="36" fill="url(#mic3s)"/>
+        <path d="M68 116 A52 52 0 0 0 172 116" fill="none" stroke="#00bfa5" stroke-width="8" stroke-linecap="round" transform="translate(0,32)"/>
+        <line x1="120" y1="196" x2="120" y2="218" stroke="#00bfa5" stroke-width="8" stroke-linecap="round"/>
+        <rect x="40" y="100" width="8" height="48" rx="4" fill="#69f0ae" opacity="0.5"/><rect x="56" y="84" width="8" height="80" rx="4" fill="#00e676" opacity="0.5"/>
+        <rect x="176" y="84" width="8" height="80" rx="4" fill="#00e676" opacity="0.5"/><rect x="192" y="100" width="8" height="48" rx="4" fill="#00bfa5" opacity="0.5"/>
+      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+        <defs><linearGradient id="mic3f" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#69f0ae"/><stop offset="100%" stop-color="#00bfa5"/></linearGradient></defs>
+        <rect width="256" height="256" rx="56" fill="#0a1a14"/>
+        <rect x="80" y="32" width="80" height="120" rx="40" fill="url(#mic3f)"/>
+        <path d="M64 116 A56 56 0 0 0 176 116" fill="none" stroke="#00bfa5" stroke-width="14" stroke-linecap="round" transform="translate(0,32)"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 4. Electric Blue to White -->
+  <h2>4. Ice (Electric Blue to White)</h2>
+  <div class="row">
+    <div class="preview">
+      <div class="bg-d">
+        <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 256 256">
+          <defs>
+            <linearGradient id="bg4" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0a0e1a"/><stop offset="100%" stop-color="#111832"/></linearGradient>
+            <linearGradient id="mic4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e0f7fa"/><stop offset="40%" stop-color="#4fc3f7"/><stop offset="100%" stop-color="#0277bd"/></linearGradient>
+          </defs>
+          <rect width="256" height="256" rx="56" fill="url(#bg4)"/>
+          <rect x="88" y="40" width="64" height="104" rx="32" fill="url(#mic4)"/>
+          <line x1="100" y1="64" x2="152" y2="64" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="76" x2="152" y2="76" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="88" x2="152" y2="88" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="100" x2="152" y2="100" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="112" x2="152" y2="112" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <path d="M72 116 A48 48 0 0 0 168 116" fill="none" stroke="#0277bd" stroke-width="6" stroke-linecap="round" transform="translate(0,32)"/>
+          <line x1="120" y1="196" x2="120" y2="216" stroke="#0277bd" stroke-width="6" stroke-linecap="round"/><line x1="96" y1="216" x2="144" y2="216" stroke="#0277bd" stroke-width="6" stroke-linecap="round"/>
+          <rect x="32" y="108" width="6" height="32" rx="3" fill="#e0f7fa" opacity="0.4"/><rect x="44" y="88" width="6" height="72" rx="3" fill="#b3e5fc" opacity="0.6"/><rect x="56" y="96" width="6" height="56" rx="3" fill="#4fc3f7" opacity="0.5"/>
+          <rect x="178" y="96" width="6" height="56" rx="3" fill="#4fc3f7" opacity="0.5"/><rect x="190" y="88" width="6" height="72" rx="3" fill="#0288d1" opacity="0.6"/><rect x="202" y="108" width="6" height="32" rx="3" fill="#0277bd" opacity="0.4"/>
+        </svg>
+      </div>
+      <span>Dark bg</span>
+    </div>
+    <div class="preview">
+      <div class="bg-w">
+        <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 256 256">
+          <defs>
+            <linearGradient id="bg4w" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0a0e1a"/><stop offset="100%" stop-color="#111832"/></linearGradient>
+            <linearGradient id="mic4w" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e0f7fa"/><stop offset="40%" stop-color="#4fc3f7"/><stop offset="100%" stop-color="#0277bd"/></linearGradient>
+          </defs>
+          <rect width="256" height="256" rx="56" fill="url(#bg4w)"/>
+          <rect x="88" y="40" width="64" height="104" rx="32" fill="url(#mic4w)"/>
+          <line x1="100" y1="64" x2="152" y2="64" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="76" x2="152" y2="76" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="88" x2="152" y2="88" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="100" x2="152" y2="100" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="112" x2="152" y2="112" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <path d="M72 116 A48 48 0 0 0 168 116" fill="none" stroke="#0277bd" stroke-width="6" stroke-linecap="round" transform="translate(0,32)"/>
+          <line x1="120" y1="196" x2="120" y2="216" stroke="#0277bd" stroke-width="6" stroke-linecap="round"/><line x1="96" y1="216" x2="144" y2="216" stroke="#0277bd" stroke-width="6" stroke-linecap="round"/>
+          <rect x="32" y="108" width="6" height="32" rx="3" fill="#e0f7fa" opacity="0.4"/><rect x="44" y="88" width="6" height="72" rx="3" fill="#b3e5fc" opacity="0.6"/><rect x="56" y="96" width="6" height="56" rx="3" fill="#4fc3f7" opacity="0.5"/>
+          <rect x="178" y="96" width="6" height="56" rx="3" fill="#4fc3f7" opacity="0.5"/><rect x="190" y="88" width="6" height="72" rx="3" fill="#0288d1" opacity="0.6"/><rect x="202" y="108" width="6" height="32" rx="3" fill="#0277bd" opacity="0.4"/>
+        </svg>
+      </div>
+      <span>On white</span>
+    </div>
+    <div class="sizes">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 256 256">
+        <defs><linearGradient id="mic4s" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e0f7fa"/><stop offset="100%" stop-color="#0277bd"/></linearGradient></defs>
+        <rect width="256" height="256" rx="56" fill="#0a0e1a"/>
+        <rect x="84" y="36" width="72" height="112" rx="36" fill="url(#mic4s)"/>
+        <path d="M68 116 A52 52 0 0 0 172 116" fill="none" stroke="#0277bd" stroke-width="8" stroke-linecap="round" transform="translate(0,32)"/>
+        <line x1="120" y1="196" x2="120" y2="218" stroke="#0277bd" stroke-width="8" stroke-linecap="round"/>
+        <rect x="40" y="100" width="8" height="48" rx="4" fill="#b3e5fc" opacity="0.5"/><rect x="56" y="84" width="8" height="80" rx="4" fill="#4fc3f7" opacity="0.5"/>
+        <rect x="176" y="84" width="8" height="80" rx="4" fill="#4fc3f7" opacity="0.5"/><rect x="192" y="100" width="8" height="48" rx="4" fill="#0277bd" opacity="0.5"/>
+      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+        <defs><linearGradient id="mic4f" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e0f7fa"/><stop offset="100%" stop-color="#0277bd"/></linearGradient></defs>
+        <rect width="256" height="256" rx="56" fill="#0a0e1a"/>
+        <rect x="80" y="32" width="80" height="120" rx="40" fill="url(#mic4f)"/>
+        <path d="M64 116 A56 56 0 0 0 176 116" fill="none" stroke="#0277bd" stroke-width="14" stroke-linecap="round" transform="translate(0,32)"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- 5. Gold to Amber -->
+  <h2>5. Gold (Amber to Deep Gold)</h2>
+  <div class="row">
+    <div class="preview">
+      <div class="bg-d">
+        <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 256 256">
+          <defs>
+            <linearGradient id="bg5" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a1408"/><stop offset="100%" stop-color="#2a1e0a"/></linearGradient>
+            <linearGradient id="mic5" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff176"/><stop offset="40%" stop-color="#ffd54f"/><stop offset="100%" stop-color="#ff8f00"/></linearGradient>
+          </defs>
+          <rect width="256" height="256" rx="56" fill="url(#bg5)"/>
+          <rect x="88" y="40" width="64" height="104" rx="32" fill="url(#mic5)"/>
+          <line x1="100" y1="64" x2="152" y2="64" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="76" x2="152" y2="76" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="88" x2="152" y2="88" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="100" x2="152" y2="100" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="112" x2="152" y2="112" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <path d="M72 116 A48 48 0 0 0 168 116" fill="none" stroke="#ff8f00" stroke-width="6" stroke-linecap="round" transform="translate(0,32)"/>
+          <line x1="120" y1="196" x2="120" y2="216" stroke="#ff8f00" stroke-width="6" stroke-linecap="round"/><line x1="96" y1="216" x2="144" y2="216" stroke="#ff8f00" stroke-width="6" stroke-linecap="round"/>
+          <rect x="32" y="108" width="6" height="32" rx="3" fill="#fff176" opacity="0.4"/><rect x="44" y="88" width="6" height="72" rx="3" fill="#ffd54f" opacity="0.6"/><rect x="56" y="96" width="6" height="56" rx="3" fill="#ffb300" opacity="0.5"/>
+          <rect x="178" y="96" width="6" height="56" rx="3" fill="#ffb300" opacity="0.5"/><rect x="190" y="88" width="6" height="72" rx="3" fill="#ff8f00" opacity="0.6"/><rect x="202" y="108" width="6" height="32" rx="3" fill="#ff8f00" opacity="0.4"/>
+        </svg>
+      </div>
+      <span>Dark bg</span>
+    </div>
+    <div class="preview">
+      <div class="bg-w">
+        <svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 256 256">
+          <defs>
+            <linearGradient id="bg5w" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a1408"/><stop offset="100%" stop-color="#2a1e0a"/></linearGradient>
+            <linearGradient id="mic5w" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff176"/><stop offset="40%" stop-color="#ffd54f"/><stop offset="100%" stop-color="#ff8f00"/></linearGradient>
+          </defs>
+          <rect width="256" height="256" rx="56" fill="url(#bg5w)"/>
+          <rect x="88" y="40" width="64" height="104" rx="32" fill="url(#mic5w)"/>
+          <line x1="100" y1="64" x2="152" y2="64" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="76" x2="152" y2="76" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="88" x2="152" y2="88" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="100" x2="152" y2="100" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><line x1="100" y1="112" x2="152" y2="112" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+          <path d="M72 116 A48 48 0 0 0 168 116" fill="none" stroke="#ff8f00" stroke-width="6" stroke-linecap="round" transform="translate(0,32)"/>
+          <line x1="120" y1="196" x2="120" y2="216" stroke="#ff8f00" stroke-width="6" stroke-linecap="round"/><line x1="96" y1="216" x2="144" y2="216" stroke="#ff8f00" stroke-width="6" stroke-linecap="round"/>
+          <rect x="32" y="108" width="6" height="32" rx="3" fill="#fff176" opacity="0.4"/><rect x="44" y="88" width="6" height="72" rx="3" fill="#ffd54f" opacity="0.6"/><rect x="56" y="96" width="6" height="56" rx="3" fill="#ffb300" opacity="0.5"/>
+          <rect x="178" y="96" width="6" height="56" rx="3" fill="#ffb300" opacity="0.5"/><rect x="190" y="88" width="6" height="72" rx="3" fill="#ff8f00" opacity="0.6"/><rect x="202" y="108" width="6" height="32" rx="3" fill="#ff8f00" opacity="0.4"/>
+        </svg>
+      </div>
+      <span>On white</span>
+    </div>
+    <div class="sizes">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 256 256">
+        <defs><linearGradient id="mic5s" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff176"/><stop offset="100%" stop-color="#ff8f00"/></linearGradient></defs>
+        <rect width="256" height="256" rx="56" fill="#1a1408"/>
+        <rect x="84" y="36" width="72" height="112" rx="36" fill="url(#mic5s)"/>
+        <path d="M68 116 A52 52 0 0 0 172 116" fill="none" stroke="#ff8f00" stroke-width="8" stroke-linecap="round" transform="translate(0,32)"/>
+        <line x1="120" y1="196" x2="120" y2="218" stroke="#ff8f00" stroke-width="8" stroke-linecap="round"/>
+        <rect x="40" y="100" width="8" height="48" rx="4" fill="#ffd54f" opacity="0.5"/><rect x="56" y="84" width="8" height="80" rx="4" fill="#ffb300" opacity="0.5"/>
+        <rect x="176" y="84" width="8" height="80" rx="4" fill="#ffb300" opacity="0.5"/><rect x="192" y="100" width="8" height="48" rx="4" fill="#ff8f00" opacity="0.5"/>
+      </svg>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 256 256">
+        <defs><linearGradient id="mic5f" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#fff176"/><stop offset="100%" stop-color="#ff8f00"/></linearGradient></defs>
+        <rect width="256" height="256" rx="56" fill="#1a1408"/>
+        <rect x="80" y="32" width="80" height="120" rx="40" fill="url(#mic5f)"/>
+        <path d="M64 116 A56 56 0 0 0 176 116" fill="none" stroke="#ff8f00" stroke-width="14" stroke-linecap="round" transform="translate(0,32)"/>
+      </svg>
+    </div>
+  </div>
+
+  <p style="opacity:0.4;margin-top:40px">Pick a number (1-5) and I'll generate the .ico file.</p>
+</body>
+</html>

@@ -1,0 +1,1845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyPitch — UX Mockup</title>
+<style>
+/* ========== RESET & BASE ========== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f0f4f8;
+  --surface: #ffffff;
+  --surface-alt: #f7fafc;
+  --border: #e2e8f0;
+  --border-focus: #4299e1;
+  --text: #1a202c;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+  --primary: #3182ce;
+  --primary-light: #ebf4ff;
+  --primary-dark: #2b6cb0;
+  --accent: #38b2ac;
+  --accent-light: #e6fffa;
+  --success: #38a169;
+  --success-light: #f0fff4;
+  --warning: #d69e2e;
+  --warning-light: #fffff0;
+  --danger: #e53e3e;
+  --danger-light: #fff5f5;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-xs: 6px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,0.06), 0 4px 6px rgba(0,0,0,0.04);
+  --transition: 200ms ease;
+}
+
+body {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* ========== LAYOUT ========== */
+.app {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* ========== HEADER ========== */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 12px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: white;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.header h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.range-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.range-badge .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* ========== NAV ========== */
+.nav {
+  display: flex;
+  gap: 4px;
+  background: var(--surface);
+  padding: 6px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+}
+
+.nav-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 8px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.nav-btn:hover {
+  background: var(--surface-alt);
+  color: var(--text-secondary);
+}
+
+.nav-btn.active {
+  background: var(--primary);
+  color: white;
+  box-shadow: var(--shadow);
+}
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-icon svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ========== MAIN CONTENT ========== */
+.page {
+  display: none;
+  animation: fadeIn 300ms ease;
+}
+
+.page.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== CARDS ========== */
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  margin-bottom: 12px;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.card-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ========== BUTTONS ========== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 2px 4px rgba(49,130,206,0.3);
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+  box-shadow: 0 4px 8px rgba(49,130,206,0.3);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--surface-alt);
+  border-color: var(--text-muted);
+}
+
+.btn-accent {
+  background: var(--accent);
+  color: white;
+  box-shadow: 0 2px 4px rgba(56,178,172,0.3);
+}
+
+.btn-accent:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(56,178,172,0.3);
+}
+
+.btn-sm {
+  padding: 6px 14px;
+  font-size: 12px;
+}
+
+.btn-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ========== HOME PAGE ========== */
+.welcome-hero {
+  text-align: center;
+  padding: 32px 20px;
+}
+
+.welcome-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 16px;
+  background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.welcome-icon svg {
+  width: 40px;
+  height: 40px;
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.welcome-hero h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.welcome-hero p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  max-width: 400px;
+  margin: 0 auto 20px;
+}
+
+.device-selector {
+  margin-top: 12px;
+}
+
+.device-selector label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.select-wrap {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.select-styled {
+  width: 100%;
+  padding: 10px 40px 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: 14px;
+  color: var(--text);
+  appearance: none;
+  cursor: pointer;
+  transition: border-color var(--transition);
+}
+
+.select-styled:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(49,130,206,0.1);
+}
+
+.select-arrow {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  color: var(--text-muted);
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.quick-card {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all var(--transition);
+  text-align: center;
+}
+
+.quick-card:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.quick-card-icon {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 8px;
+  background: var(--surface-alt);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quick-card-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--primary);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.quick-card h4 {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.quick-card p {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ========== TEST LIVE PAGE ========== */
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 24px;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-muted);
+  transition: all var(--transition);
+}
+
+.step.active .step-circle {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 0 0 4px rgba(49,130,206,0.15);
+}
+
+.step.done .step-circle {
+  border-color: var(--success);
+  background: var(--success);
+  color: white;
+}
+
+.step-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.step.active .step-label { color: var(--primary); }
+.step.done .step-label { color: var(--success); }
+
+.step-line {
+  width: 60px;
+  height: 2px;
+  background: var(--border);
+  margin: 0 -4px;
+  margin-bottom: 22px;
+  z-index: 0;
+}
+
+.step-line.done {
+  background: var(--success);
+}
+
+.note-display {
+  text-align: center;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.note-ring {
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 16px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.note-ring-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 6px solid var(--border);
+}
+
+.note-ring-progress {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 6px solid transparent;
+  border-top-color: var(--primary);
+  border-right-color: var(--primary);
+  transform: rotate(-90deg);
+  transition: all 200ms linear;
+}
+
+.note-ring-progress.p75 {
+  border-bottom-color: var(--primary);
+}
+
+.note-ring-progress.p100 {
+  border-bottom-color: var(--primary);
+  border-left-color: var(--primary);
+}
+
+.note-value {
+  font-size: 42px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -1px;
+}
+
+.note-value.detecting {
+  animation: notePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes notePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+.note-freq {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.instruction-text {
+  text-align: center;
+  font-size: 15px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  background: var(--primary-light);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--primary);
+}
+
+.test-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.debug-toggle {
+  text-align: center;
+  margin-top: 12px;
+}
+
+.debug-toggle button {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.debug-panel {
+  display: none;
+  margin-top: 12px;
+  padding: 12px;
+  background: var(--surface-alt);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.debug-panel.visible {
+  display: block;
+}
+
+.debug-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.debug-item {
+  text-align: center;
+}
+
+.debug-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.debug-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+/* ========== RESULT PAGE ========== */
+.result-hero {
+  text-align: center;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.result-hero h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.result-range-text {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--primary);
+  margin: 8px 0;
+}
+
+.result-meta {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.piano-wrap {
+  padding: 12px 0;
+  overflow-x: auto;
+}
+
+.piano {
+  display: flex;
+  height: 100px;
+  min-width: 600px;
+  position: relative;
+  margin: 0 auto;
+  max-width: 700px;
+}
+
+.piano-key {
+  flex: 1;
+  border: 1px solid #d0d0d0;
+  background: white;
+  border-radius: 0 0 4px 4px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 6px;
+  font-size: 9px;
+  color: #999;
+  min-width: 24px;
+}
+
+.piano-key.black {
+  background: #2d3748;
+  color: #888;
+  flex: 0.6;
+  height: 60px;
+  margin: 0 -5px;
+  z-index: 2;
+  border-color: #1a202c;
+  border-radius: 0 0 3px 3px;
+}
+
+.piano-key.in-range {
+  background: linear-gradient(180deg, #ebf8ff, #bee3f8);
+  border-color: var(--primary);
+}
+
+.piano-key.black.in-range {
+  background: linear-gradient(180deg, #2b6cb0, #3182ce);
+  border-color: #2b6cb0;
+}
+
+.piano-key.comfort {
+  background: linear-gradient(180deg, #c6f6d5, #9ae6b4);
+  border-color: var(--success);
+}
+
+.piano-key.black.comfort {
+  background: linear-gradient(180deg, #276749, #38a169);
+  border-color: #276749;
+}
+
+.piano-legend {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+.legend-swatch.range { background: #bee3f8; border: 1px solid var(--primary); }
+.legend-swatch.comfort { background: #9ae6b4; border: 1px solid var(--success); }
+
+.voice-type-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  background: var(--accent-light);
+  border-radius: var(--radius-sm);
+  margin-top: 16px;
+}
+
+.voice-type-icon {
+  width: 40px;
+  height: 40px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.voice-type-icon svg {
+  width: 20px; height: 20px;
+  stroke: var(--accent);
+  fill: none;
+  stroke-width: 2;
+}
+
+.voice-type-info h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.voice-type-info p {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.result-cta {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* ========== SONG LIBRARY PAGE ========== */
+.drop-zone {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 40px 20px;
+  text-align: center;
+  transition: all var(--transition);
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.drop-zone:hover {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+.drop-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 12px;
+  background: var(--surface-alt);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drop-icon svg {
+  width: 28px;
+  height: 28px;
+  stroke: var(--primary);
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+.drop-zone h3 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.drop-zone p {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.progress-steps {
+  display: flex;
+  gap: 0;
+  margin-bottom: 16px;
+}
+
+.progress-step {
+  flex: 1;
+  padding: 10px 12px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-align: center;
+  position: relative;
+}
+
+.progress-step:first-child {
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+}
+
+.progress-step:last-child {
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.progress-step.done {
+  background: var(--success-light);
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.progress-step.active {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.song-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 13px;
+}
+
+.song-table th {
+  text-align: left;
+  padding: 10px 12px;
+  background: var(--surface-alt);
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+}
+
+.song-table th:first-child { border-radius: var(--radius-sm) 0 0 0; }
+.song-table th:last-child { border-radius: 0 var(--radius-sm) 0 0; }
+
+.song-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+
+.song-table tr:last-child td { border-bottom: none; }
+
+.song-table tr:hover td {
+  background: var(--surface-alt);
+}
+
+.table-range {
+  display: inline-block;
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* ========== RECOMMENDATIONS PAGE ========== */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-chip {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  color: var(--text-secondary);
+}
+
+.filter-chip:hover { background: var(--surface-alt); }
+.filter-chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+.filter-chip.great.active { background: var(--success); border-color: var(--success); }
+.filter-chip.singable.active { background: var(--primary); border-color: var(--primary); }
+.filter-chip.challenging.active { background: var(--warning); border-color: var(--warning); color: var(--text); }
+
+.search-input {
+  margin-left: auto;
+  padding: 6px 12px 6px 32px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 13px;
+  background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23718096' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") 10px center no-repeat;
+  transition: border-color var(--transition);
+  width: 180px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(49,130,206,0.1);
+}
+
+.reco-cards {
+  display: grid;
+  gap: 10px;
+}
+
+.reco-card {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.reco-card:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.reco-card.expanded {
+  border-color: var(--primary);
+  box-shadow: var(--shadow);
+}
+
+.reco-card-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.reco-rank {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--surface-alt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.reco-card:first-child .reco-rank {
+  background: linear-gradient(135deg, #fefcbf, #f6e05e);
+  color: #975a16;
+}
+
+.reco-info {
+  min-width: 0;
+}
+
+.reco-song-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reco-artist {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.reco-shift {
+  padding: 4px 10px;
+  background: var(--surface-alt);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.reco-score {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.score-bar-wrap {
+  width: 60px;
+  height: 6px;
+  background: var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.score-bar {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 400ms ease;
+}
+
+.score-bar.great { background: var(--success); }
+.score-bar.singable { background: var(--primary); }
+.score-bar.challenging { background: var(--warning); }
+.score-bar.low { background: var(--danger); }
+
+.score-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.score-badge.great { background: var(--success-light); color: var(--success); }
+.score-badge.singable { background: var(--primary-light); color: var(--primary); }
+.score-badge.challenging { background: var(--warning-light); color: #b7791f; }
+.score-badge.low { background: var(--danger-light); color: var(--danger); }
+
+.reco-detail {
+  display: none;
+  grid-column: 1 / -1;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  margin-top: 10px;
+}
+
+.reco-card.expanded .reco-detail {
+  display: block;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.detail-item label {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-bottom: 2px;
+}
+
+.detail-item span {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.range-compare {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: var(--surface-alt);
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+}
+
+.range-compare-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  width: 60px;
+  flex-shrink: 0;
+}
+
+.range-compare-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--border);
+  border-radius: 999px;
+  position: relative;
+  overflow: hidden;
+}
+
+.range-compare-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 999px;
+}
+
+.range-compare-fill.yours { background: rgba(56,178,172,0.4); }
+.range-compare-fill.song { background: rgba(49,130,206,0.6); }
+
+.tech-toggle {
+  background: none;
+  border: none;
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.tech-details {
+  display: none;
+  margin-top: 10px;
+  padding: 10px;
+  background: var(--surface-alt);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.tech-details.visible {
+  display: block;
+}
+
+.penalty-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.penalty-item {
+  text-align: center;
+}
+
+.penalty-label {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.penalty-value {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.penalty-value.ok { color: var(--success); }
+.penalty-value.warn { color: var(--warning); }
+.penalty-value.bad { color: var(--danger); }
+
+.fit-reasons-list {
+  margin-top: 10px;
+  padding-left: 0;
+  list-style: none;
+}
+
+.fit-reasons-list li {
+  font-size: 13px;
+  color: var(--text-secondary);
+  padding: 4px 0 4px 20px;
+  position: relative;
+}
+
+.fit-reasons-list li::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+/* ========== STATUS BAR ========== */
+.status-bar {
+  margin-top: 8px;
+  padding: 8px 14px;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--success);
+}
+
+.status-dot.idle { background: var(--text-muted); }
+.status-dot.active { background: var(--success); animation: statusPulse 1.5s infinite; }
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ========== LEVEL METER (test live) ========== */
+.level-meter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.level-label-sm {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 600;
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.level-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.level-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--success), var(--warning), var(--danger));
+  border-radius: 999px;
+  transition: width 100ms linear;
+}
+
+.level-pct {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  width: 36px;
+  text-align: right;
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <div class="logo">
+        <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </div>
+      <h1>MyPitch</h1>
+    </div>
+    <div class="range-badge">
+      <span class="dot"></span>
+      E2 &ndash; G4
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <button class="nav-btn active" onclick="showPage('home')">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+      Home
+    </button>
+    <button class="nav-btn" onclick="showPage('test')">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg></span>
+      Test Live
+    </button>
+    <button class="nav-btn" onclick="showPage('result')">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
+      Result
+    </button>
+    <button class="nav-btn" onclick="showPage('library')">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span>
+      Library
+    </button>
+    <button class="nav-btn" onclick="showPage('reco')">
+      <span class="nav-icon"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+      For You
+    </button>
+  </nav>
+
+  <!-- ==================== HOME ==================== -->
+  <div id="page-home" class="page active">
+    <div class="card">
+      <div class="welcome-hero">
+        <div class="welcome-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </div>
+        <h2>Welcome to MyPitch</h2>
+        <p>Discover your vocal range and find songs that match your voice perfectly.</p>
+        <button class="btn btn-primary" onclick="showPage('test')">
+          <span class="btn-icon"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></span>
+          Start Range Test
+        </button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Microphone</div>
+          <div class="card-subtitle">Select your input device</div>
+        </div>
+        <button class="btn btn-secondary btn-sm">Refresh</button>
+      </div>
+      <div class="device-selector">
+        <div class="select-wrap">
+          <select class="select-styled">
+            <option>Realtek HD Audio Microphone | 44100 Hz | 1 ch</option>
+            <option>USB Condenser Mic | 48000 Hz | 1 ch</option>
+          </select>
+          <svg class="select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <div class="quick-card" onclick="showPage('test')">
+        <div class="quick-card-icon"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg></div>
+        <h4>Range Test</h4>
+        <p>Find your vocal range</p>
+      </div>
+      <div class="quick-card" onclick="showPage('library')">
+        <div class="quick-card-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
+        <h4>Import Songs</h4>
+        <p>Analyze your own music</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TEST LIVE ==================== -->
+  <div id="page-test" class="page">
+    <div class="card">
+      <!-- Stepper -->
+      <div class="stepper">
+        <div class="step done">
+          <div class="step-circle">&#10003;</div>
+          <span class="step-label">Low Note</span>
+        </div>
+        <div class="step-line done"></div>
+        <div class="step active">
+          <div class="step-circle">2</div>
+          <span class="step-label">High Note</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+          <div class="step-circle">3</div>
+          <span class="step-label">Result</span>
+        </div>
+      </div>
+
+      <!-- Note Display -->
+      <div class="note-display">
+        <div class="note-ring">
+          <div class="note-ring-bg"></div>
+          <div class="note-ring-progress p75"></div>
+          <span class="note-value detecting">A4</span>
+        </div>
+        <div class="note-freq">440.00 Hz</div>
+      </div>
+
+      <div class="instruction-text">
+        Sing your highest comfortable note and hold steady...
+      </div>
+
+      <!-- Level Meter -->
+      <div class="level-meter">
+        <span class="level-label-sm">Input Level</span>
+        <div class="level-bar">
+          <div class="level-bar-fill" style="width: 65%"></div>
+        </div>
+        <span class="level-pct">65%</span>
+      </div>
+
+      <!-- Actions -->
+      <div class="test-actions">
+        <button class="btn btn-primary btn-sm">Start Test</button>
+        <button class="btn btn-secondary btn-sm">Stop</button>
+        <button class="btn btn-secondary btn-sm">Reset</button>
+      </div>
+
+      <!-- Debug -->
+      <div class="debug-toggle">
+        <button onclick="toggleDebug()">Show technical details</button>
+      </div>
+      <div id="debug-panel" class="debug-panel">
+        <div class="debug-grid">
+          <div class="debug-item">
+            <div class="debug-label">RMS</div>
+            <div class="debug-value">0.0342</div>
+          </div>
+          <div class="debug-item">
+            <div class="debug-label">Confidence</div>
+            <div class="debug-value">78%</div>
+          </div>
+          <div class="debug-item">
+            <div class="debug-label">Hold</div>
+            <div class="debug-value">450ms</div>
+          </div>
+          <div class="debug-item">
+            <div class="debug-label">Stage</div>
+            <div class="debug-value">High</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== RESULT ==================== -->
+  <div id="page-result" class="page">
+    <div class="card">
+      <div class="result-hero">
+        <h2>Your Vocal Range</h2>
+        <div class="result-range-text">E2 &ndash; G4</div>
+        <div class="result-meta">About 2.5 octaves &middot; 30 semitones</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" style="margin-bottom:12px">Range Visualization</div>
+      <div class="piano-wrap">
+        <div class="piano">
+          <!-- Octave 2: E2 to B2 (in range) -->
+          <div class="piano-key">C2</div>
+          <div class="piano-key black">C#</div>
+          <div class="piano-key">D2</div>
+          <div class="piano-key black">D#</div>
+          <div class="piano-key in-range">E2</div>
+          <div class="piano-key in-range">F2</div>
+          <div class="piano-key black in-range">F#</div>
+          <div class="piano-key in-range">G2</div>
+          <div class="piano-key black in-range">G#</div>
+          <div class="piano-key in-range">A2</div>
+          <div class="piano-key black in-range">A#</div>
+          <div class="piano-key in-range">B2</div>
+          <!-- Octave 3: all in range, middle is comfort -->
+          <div class="piano-key in-range">C3</div>
+          <div class="piano-key black in-range">C#</div>
+          <div class="piano-key comfort">D3</div>
+          <div class="piano-key black comfort">D#</div>
+          <div class="piano-key comfort">E3</div>
+          <div class="piano-key comfort">F3</div>
+          <div class="piano-key black comfort">F#</div>
+          <div class="piano-key comfort">G3</div>
+          <div class="piano-key black comfort">G#</div>
+          <div class="piano-key comfort">A3</div>
+          <div class="piano-key black comfort">A#</div>
+          <div class="piano-key comfort">B3</div>
+          <!-- Octave 4: C4 to G4 in range -->
+          <div class="piano-key comfort">C4</div>
+          <div class="piano-key black comfort">C#</div>
+          <div class="piano-key in-range">D4</div>
+          <div class="piano-key black in-range">D#</div>
+          <div class="piano-key in-range">E4</div>
+          <div class="piano-key in-range">F4</div>
+          <div class="piano-key black in-range">F#</div>
+          <div class="piano-key in-range">G4</div>
+          <div class="piano-key black">G#</div>
+          <div class="piano-key">A4</div>
+          <div class="piano-key black">A#</div>
+          <div class="piano-key">B4</div>
+        </div>
+      </div>
+      <div class="piano-legend">
+        <div class="legend-item"><div class="legend-swatch range"></div> Full Range</div>
+        <div class="legend-item"><div class="legend-swatch comfort"></div> Comfort Zone</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="voice-type-card">
+        <div class="voice-type-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+        </div>
+        <div class="voice-type-info">
+          <h4>Baritone Range</h4>
+          <p>Your range is similar to a baritone voice type, comfortable in the mid-low register.</p>
+        </div>
+      </div>
+      <div class="result-cta">
+        <button class="btn btn-accent" onclick="showPage('reco')">
+          <span class="btn-icon"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+          Find Songs for My Voice
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SONG LIBRARY ==================== -->
+  <div id="page-library" class="page">
+    <div class="card">
+      <div class="drop-zone">
+        <div class="drop-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <h3>Drop audio files here</h3>
+        <p>or click to browse &middot; Supports MP3, WAV</p>
+      </div>
+    </div>
+
+    <!-- Analysis Progress (shown during import) -->
+    <div class="card">
+      <div class="card-title" style="margin-bottom:12px">Analysis Progress</div>
+      <div class="progress-steps">
+        <div class="progress-step done">1. Decode Audio</div>
+        <div class="progress-step active">2. Pitch Tracking</div>
+        <div class="progress-step">3. Save Results</div>
+      </div>
+      <div style="font-size:13px; color:var(--text-muted); margin-top:8px">Processing: song_demo.mp3 (2 of 3 files)</div>
+    </div>
+
+    <!-- Imported Songs Table -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Imported Songs</div>
+          <div class="card-subtitle">3 songs analyzed</div>
+        </div>
+      </div>
+      <table class="song-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Range</th>
+            <th>Imported</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Bohemian Rhapsody</strong></td>
+            <td>Queen</td>
+            <td><span class="table-range">Bb2 - F5</span></td>
+            <td>Today</td>
+          </tr>
+          <tr>
+            <td><strong>Someone Like You</strong></td>
+            <td>Adele</td>
+            <td><span class="table-range">E3 - D5</span></td>
+            <td>Today</td>
+          </tr>
+          <tr>
+            <td><strong>Creep</strong></td>
+            <td>Radiohead</td>
+            <td><span class="table-range">G2 - B4</span></td>
+            <td>Yesterday</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ==================== RECOMMENDATIONS ==================== -->
+  <div id="page-reco" class="page">
+    <div class="filter-bar">
+      <button class="filter-chip active">All</button>
+      <button class="filter-chip great" onclick="this.classList.toggle('active')">Great Fit</button>
+      <button class="filter-chip singable" onclick="this.classList.toggle('active')">Singable</button>
+      <button class="filter-chip challenging" onclick="this.classList.toggle('active')">Challenging</button>
+      <input type="text" class="search-input" placeholder="Search songs...">
+    </div>
+
+    <div class="reco-cards">
+
+      <!-- Song 1 - Expanded -->
+      <div class="reco-card expanded" onclick="toggleCard(this)">
+        <div class="reco-card-main">
+          <div class="reco-rank">1</div>
+          <div class="reco-info">
+            <div class="reco-song-title">Creep</div>
+            <div class="reco-artist">Radiohead</div>
+          </div>
+        </div>
+        <div class="reco-shift">0 st</div>
+        <div class="reco-score">
+          <div class="score-bar-wrap"><div class="score-bar great" style="width:94%"></div></div>
+          <span class="score-badge great">94 Great Fit</span>
+        </div>
+
+        <div class="reco-detail">
+          <div class="detail-grid">
+            <div class="detail-item">
+              <label>Melody Range (shifted)</label>
+              <span>G2 &ndash; B4</span>
+            </div>
+            <div class="detail-item">
+              <label>Chorus Range (shifted)</label>
+              <span>A2 &ndash; A4</span>
+            </div>
+            <div class="detail-item">
+              <label>Original Range</label>
+              <span>G2 &ndash; B4</span>
+            </div>
+            <div class="detail-item">
+              <label>Key Shift</label>
+              <span>Original key</span>
+            </div>
+          </div>
+
+          <div class="range-compare">
+            <span class="range-compare-label">Your range</span>
+            <div class="range-compare-bar">
+              <div class="range-compare-fill yours" style="left:10%;width:70%"></div>
+            </div>
+          </div>
+          <div class="range-compare">
+            <span class="range-compare-label">Song range</span>
+            <div class="range-compare-bar">
+              <div class="range-compare-fill song" style="left:12%;width:55%"></div>
+            </div>
+          </div>
+
+          <ul class="fit-reasons-list">
+            <li>Original key works perfectly for your range</li>
+            <li>Top note stays within comfort zone with 2 semitone headroom</li>
+            <li>High-note load is manageable for your tested range</li>
+          </ul>
+
+          <button class="tech-toggle" onclick="event.stopPropagation(); toggleTech('tech-1')">Show penalty breakdown</button>
+          <div id="tech-1" class="tech-details">
+            <div class="penalty-grid">
+              <div class="penalty-item">
+                <div class="penalty-label">Shift</div>
+                <div class="penalty-value ok">0.0</div>
+              </div>
+              <div class="penalty-item">
+                <div class="penalty-label">Range</div>
+                <div class="penalty-value ok">0.0</div>
+              </div>
+              <div class="penalty-item">
+                <div class="penalty-label">Chorus</div>
+                <div class="penalty-value ok">2.5</div>
+              </div>
+              <div class="penalty-item">
+                <div class="penalty-label">High Notes</div>
+                <div class="penalty-value ok">1.5</div>
+              </div>
+              <div class="penalty-item">
+                <div class="penalty-label">Low</div>
+                <div class="penalty-value ok">0.0</div>
+              </div>
+              <div class="penalty-item">
+                <div class="penalty-label">Headroom</div>
+                <div class="penalty-value ok">+2</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Song 2 -->
+      <div class="reco-card" onclick="toggleCard(this)">
+        <div class="reco-card-main">
+          <div class="reco-rank">2</div>
+          <div class="reco-info">
+            <div class="reco-song-title">Let It Be</div>
+            <div class="reco-artist">The Beatles</div>
+          </div>
+        </div>
+        <div class="reco-shift">-2 st</div>
+        <div class="reco-score">
+          <div class="score-bar-wrap"><div class="score-bar great" style="width:91%"></div></div>
+          <span class="score-badge great">91 Great Fit</span>
+        </div>
+        <div class="reco-detail">
+          <div class="detail-grid">
+            <div class="detail-item"><label>Melody Range</label><span>E2 &ndash; E4</span></div>
+            <div class="detail-item"><label>Chorus Range</label><span>G2 &ndash; D4</span></div>
+            <div class="detail-item"><label>Original Range</label><span>F#2 &ndash; F#4</span></div>
+            <div class="detail-item"><label>Key Shift</label><span>-2 semitones</span></div>
+          </div>
+          <ul class="fit-reasons-list">
+            <li>Key shift -2 semitones, final range E2-E4</li>
+            <li>Top note stays within comfort zone with 3 semitone headroom</li>
+            <li>High-note load is manageable for your tested range</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Song 3 -->
+      <div class="reco-card" onclick="toggleCard(this)">
+        <div class="reco-card-main">
+          <div class="reco-rank">3</div>
+          <div class="reco-info">
+            <div class="reco-song-title">Someone Like You</div>
+            <div class="reco-artist">Adele</div>
+          </div>
+        </div>
+        <div class="reco-shift">-3 st</div>
+        <div class="reco-score">
+          <div class="score-bar-wrap"><div class="score-bar singable" style="width:82%"></div></div>
+          <span class="score-badge singable">82 Singable</span>
+        </div>
+        <div class="reco-detail">
+          <div class="detail-grid">
+            <div class="detail-item"><label>Melody Range</label><span>C#3 &ndash; B4</span></div>
+            <div class="detail-item"><label>Chorus Range</label><span>E3 &ndash; A4</span></div>
+            <div class="detail-item"><label>Original Range</label><span>E3 &ndash; D5</span></div>
+            <div class="detail-item"><label>Key Shift</label><span>-3 semitones</span></div>
+          </div>
+          <ul class="fit-reasons-list">
+            <li>Key shift -3 semitones, final range C#3-B4</li>
+            <li>Top note is 1 semitone above comfort high, may require mix voice</li>
+            <li>High-note load is manageable for your tested range</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Song 4 -->
+      <div class="reco-card" onclick="toggleCard(this)">
+        <div class="reco-card-main">
+          <div class="reco-rank">4</div>
+          <div class="reco-info">
+            <div class="reco-song-title">Hotel California</div>
+            <div class="reco-artist">Eagles</div>
+          </div>
+        </div>
+        <div class="reco-shift">-1 st</div>
+        <div class="reco-score">
+          <div class="score-bar-wrap"><div class="score-bar singable" style="width:78%"></div></div>
+          <span class="score-badge singable">78 Singable</span>
+        </div>
+        <div class="reco-detail">
+          <div class="detail-grid">
+            <div class="detail-item"><label>Melody Range</label><span>E2 &ndash; F#4</span></div>
+            <div class="detail-item"><label>Key Shift</label><span>-1 semitone</span></div>
+          </div>
+          <ul class="fit-reasons-list">
+            <li>Key shift -1 semitone brings the range comfortably in reach</li>
+            <li>Top note is close to comfort high, manageable with practice</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Song 5 -->
+      <div class="reco-card" onclick="toggleCard(this)">
+        <div class="reco-card-main">
+          <div class="reco-rank">5</div>
+          <div class="reco-info">
+            <div class="reco-song-title">Bohemian Rhapsody</div>
+            <div class="reco-artist">Queen</div>
+          </div>
+        </div>
+        <div class="reco-shift">-5 st</div>
+        <div class="reco-score">
+          <div class="score-bar-wrap"><div class="score-bar challenging" style="width:63%"></div></div>
+          <span class="score-badge challenging">63 Challenging</span>
+        </div>
+        <div class="reco-detail">
+          <div class="detail-grid">
+            <div class="detail-item"><label>Melody Range</label><span>F2 &ndash; C5</span></div>
+            <div class="detail-item"><label>Key Shift</label><span>-5 semitones</span></div>
+          </div>
+          <ul class="fit-reasons-list">
+            <li>Large transposition needed, pitch color may change from original key</li>
+            <li>Frequent high-note sections increase fatigue risk</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-dot active"></span>
+    <span>Audio input active &middot; Realtek HD Audio Microphone</span>
+  </div>
+
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const labels = { home: 'Home', test: 'Test Live', result: 'Result', library: 'Library', reco: 'For You' };
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    if (b.textContent.trim() === labels[id]) b.classList.add('active');
+  });
+}
+
+function toggleDebug() {
+  const panel = document.getElementById('debug-panel');
+  panel.classList.toggle('visible');
+}
+
+function toggleCard(card) {
+  card.classList.toggle('expanded');
+}
+
+function toggleTech(id) {
+  document.getElementById(id).classList.toggle('visible');
+}
+</script>
+
+</body>
+</html>
