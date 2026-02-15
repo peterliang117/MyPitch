@@ -1,0 +1,22 @@
+[package]
+name = "mypitch"
+version = "0.1.0"
+description = "MyPitch desktop app"
+authors = ["you"]
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+cpal = "0.16"
+crossbeam-channel = "0.5"
+csv = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+yin = "0.2"
+
+[profile.dev]
+incremental = true
