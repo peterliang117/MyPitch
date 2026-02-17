@@ -17,6 +17,37 @@ use std::thread::{self, JoinHandle};
 use std::time::Duration;
 use tauri_plugin_dialog::DialogExt;
 
+/// Resolve the resource root directory at runtime.
+/// In dev mode (`cargo tauri dev`), CARGO_MANIFEST_DIR points to src-tauri/.
+/// In release/installed mode, resources are next to the executable.
+pub(crate) fn resource_root() -> PathBuf {
+    // Release mode: resources sit next to the exe
+    if let Ok(exe) = std::env::current_exe() {
+        if let Some(exe_dir) = exe.parent() {
+            // NSIS installs put resources directly next to the exe
+            let candidate = exe_dir.join("resources").join("songs.csv");
+            if candidate.exists() {
+                return exe_dir.to_path_buf();
+            }
+        }
+    }
+    // Dev mode: fall back to CARGO_MANIFEST_DIR
+    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+}
+
+/// Resolve the project root (parent of src-tauri in dev, or exe dir in release).
+pub(crate) fn project_root() -> PathBuf {
+    let res_root = resource_root();
+    // In dev mode, res_root = src-tauri, so parent = project root
+    // In release mode, res_root = exe dir, which is already the "root"
+    if res_root.join("Cargo.toml").exists() {
+        // We're in src-tauri/ dev mode
+        res_root.parent().unwrap_or(&res_root).to_path_buf()
+    } else {
+        res_root
+    }
+}
+
 #[derive(Serialize)]
 struct InputDeviceInfo {
     id: String,
@@ -444,17 +475,14 @@ fn run_analyzer_with(
     script_path: &PathBuf,
     file_paths: &[String],
 ) -> Result<ImportAnalyzeResponse, String> {
-    let project_root = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .parent()
-        .map(|p| p.to_path_buf())
-        .ok_or_else(|| "Failed to resolve project root".to_string())?;
+    let root = project_root();
 
     let mut cmd = Command::new(python_cmd);
     let output = cmd
         .args(python_args)
         .arg(script_path)
         .args(file_paths)
-        .current_dir(&project_root)
+        .current_dir(&root)
         .output()
         .map_err(|e| format!("Failed to run analyzer with {python_cmd} {:?}: {e}", python_args))?;
 
@@ -494,20 +522,19 @@ fn import_and_analyze_songs(file_paths: Vec<String>) -> Result<ImportAnalyzeResp
         return Ok(ImportAnalyzeResponse::default());
     }
 
-    let script_path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .parent()
-        .map(|p| p.join("tools").join("audio_analyzer").join("analyze.py"))
-        .ok_or_else(|| "Failed to resolve analyze.py path".to_string())?;
+    let root = project_root();
+    let script_path = root.join("tools").join("audio_analyzer").join("analyze.py");
 
     if !script_path.exists() {
-        return Err(format!("Analyzer script not found: {}", script_path.display()));
+        return Err(format!(
+            "Analyzer script not found: {}\n\
+             Song import requires Python 3.10+ with librosa.\n\
+             See the README for setup instructions.",
+            script_path.display()
+        ));
     }
 
-    let project_root = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .parent()
-        .map(|p| p.to_path_buf())
-        .ok_or_else(|| "Failed to resolve project root".to_string())?;
-    let venv_python = project_root
+    let venv_python = root
         .join("tools")
         .join("audio_analyzer")
         .join(".venv")

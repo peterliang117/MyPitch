@@ -2,7 +2,7 @@ pub mod fit;
 
 use fit::{compute_fit_detail, FitDetail};
 use serde::Serialize;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 #[derive(Clone)]
 pub struct SongEntry {
@@ -39,11 +39,13 @@ pub struct SongRecommendation {
 
 pub fn parse_song_library() -> Vec<SongEntry> {
     let mut all = Vec::new();
-    let base = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("resources").join("songs.csv");
-    let generated = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("..")
-        .join("assets")
-        .join("songs_generated.csv");
+    let res_root = crate::resource_root();
+    let proj_root = crate::project_root();
+
+    let base = res_root.join("resources").join("songs.csv");
+    // In dev mode, generated csv is at <project>/assets/songs_generated.csv
+    // In release mode, it's at <exe_dir>/assets/songs_generated.csv
+    let generated = proj_root.join("assets").join("songs_generated.csv");
 
     all.extend(parse_song_csv_file(&base, false));
     all.extend(parse_song_csv_file(&generated, true));

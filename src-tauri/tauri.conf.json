@@ -29,6 +29,11 @@
     "targets": "all",
     "icon": [
       "icons/icon.ico"
-    ]
+    ],
+    "resources": {
+      "resources/songs.csv": "resources/songs.csv",
+      "../tools/audio_analyzer/analyze.py": "tools/audio_analyzer/analyze.py",
+      "../tools/audio_analyzer/requirements.txt": "tools/audio_analyzer/requirements.txt"
+    }
   }
 }
