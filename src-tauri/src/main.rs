@@ -18,32 +18,50 @@ use std::time::Duration;
 use tauri_plugin_dialog::DialogExt;
 
 /// Resolve the resource root directory at runtime.
-/// In dev mode (`cargo tauri dev`), CARGO_MANIFEST_DIR points to src-tauri/.
-/// In release/installed mode, resources are next to the executable.
+///
+/// Release (installed) mode: resources sit next to the executable.
+/// The NSIS installer lays out:
+///   $INSTDIR/mypitch.exe
+///   $INSTDIR/resources/songs.csv
+///   $INSTDIR/tools/audio_analyzer/analyze.py
+///
+/// Dev mode (`cargo tauri dev`): CARGO_MANIFEST_DIR points to src-tauri/.
 pub(crate) fn resource_root() -> PathBuf {
-    // Release mode: resources sit next to the exe
-    if let Ok(exe) = std::env::current_exe() {
-        if let Some(exe_dir) = exe.parent() {
-            // NSIS installs put resources directly next to the exe
-            let candidate = exe_dir.join("resources").join("songs.csv");
-            if candidate.exists() {
+    // In debug (dev) builds, use the compile-time project path
+    #[cfg(debug_assertions)]
+    {
+        return PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    }
+
+    // In release builds, always resolve relative to the running executable
+    #[cfg(not(debug_assertions))]
+    {
+        if let Ok(exe) = std::env::current_exe() {
+            // canonicalize resolves symlinks so we get the real install dir
+            let real_exe = exe.canonicalize().unwrap_or(exe);
+            if let Some(exe_dir) = real_exe.parent() {
                 return exe_dir.to_path_buf();
             }
         }
+        // Last resort — should never happen in practice
+        PathBuf::from(".")
     }
-    // Dev mode: fall back to CARGO_MANIFEST_DIR
-    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 }
 
-/// Resolve the project root (parent of src-tauri in dev, or exe dir in release).
+/// Resolve the project root.
+/// Dev mode: parent of src-tauri/ (i.e. the repo root).
+/// Release mode: same as exe dir (resources are beside the exe).
 pub(crate) fn project_root() -> PathBuf {
     let res_root = resource_root();
-    // In dev mode, res_root = src-tauri, so parent = project root
-    // In release mode, res_root = exe dir, which is already the "root"
-    if res_root.join("Cargo.toml").exists() {
-        // We're in src-tauri/ dev mode
-        res_root.parent().unwrap_or(&res_root).to_path_buf()
-    } else {
+
+    #[cfg(debug_assertions)]
+    {
+        // res_root = src-tauri/, parent = project root
+        return res_root.parent().unwrap_or(&res_root).to_path_buf();
+    }
+
+    #[cfg(not(debug_assertions))]
+    {
         res_root
     }
 }
