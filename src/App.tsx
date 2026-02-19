@@ -64,6 +64,22 @@ type ImportAnalyzeResponse = {
   output?: string;
 };
 
+type PythonEnvStatus = {
+  python_found: boolean;
+  python_version: string;
+  python_path: string;
+  venv_exists: boolean;
+  deps_installed: boolean;
+  missing_deps: string[];
+  ready: boolean;
+};
+
+type SetupProgress = {
+  step: string;
+  success: boolean;
+  message: string;
+};
+
 const SELECTED_DEVICE_KEY = "selected_input_device_id";
 const CONFIDENCE_THRESHOLD = 0.12;
 const CONFIDENCE_PASS_THRESHOLD = 0.55;
@@ -234,6 +250,10 @@ function App() {
   const [importLogs, setImportLogs] = useState<string[]>([]);
   const [importSummary, setImportSummary] = useState<string>("");
   const [importFileCount, setImportFileCount] = useState(0);
+  const [pythonEnv, setPythonEnv] = useState<PythonEnvStatus | null>(null);
+  const [pythonChecking, setPythonChecking] = useState(false);
+  const [pythonSetupBusy, setPythonSetupBusy] = useState(false);
+  const [pythonSetupLogs, setPythonSetupLogs] = useState<SetupProgress[]>([]);
   const [showAllRecommendations, setShowAllRecommendations] = useState(false);
   const [showDebug, setShowDebug] = useState(false);
   const [expandedSong, setExpandedSong] = useState<string | null>(null);
@@ -604,6 +624,38 @@ function App() {
     }
   };
 
+  const checkPythonEnv = async () => {
+    setPythonChecking(true);
+    try {
+      const status = await invoke<PythonEnvStatus>("check_python_env");
+      setPythonEnv(status);
+    } catch (error) {
+      setPythonEnv({
+        python_found: false, python_version: "", python_path: "",
+        venv_exists: false, deps_installed: false,
+        missing_deps: ["librosa", "numpy", "soundfile"], ready: false,
+      });
+    } finally {
+      setPythonChecking(false);
+    }
+  };
+
+  const setupPythonEnv = async () => {
+    setPythonSetupBusy(true);
+    setPythonSetupLogs([]);
+    try {
+      const results = await invoke<SetupProgress[]>("setup_python_env");
+      setPythonSetupLogs(results);
+      // Re-check after setup
+      const status = await invoke<PythonEnvStatus>("check_python_env");
+      setPythonEnv(status);
+    } catch (error) {
+      setPythonSetupLogs([{ step: "error", success: false, message: String(error) }]);
+    } finally {
+      setPythonSetupBusy(false);
+    }
+  };
+
   const importAudioFiles = async () => {
     const paths = await invoke<string[]>("pick_audio_files");
     if (paths.length === 0) return;
@@ -635,6 +687,12 @@ function App() {
       void loadRecommendations();
     }
   }, [activePage, rangeResult.lowMidi, rangeResult.highMidi, rangeResult.comfortLowMidi, rangeResult.comfortHighMidi]);
+
+  useEffect(() => {
+    if (activePage === "Song Library" && pythonEnv === null) {
+      void checkPythonEnv();
+    }
+  }, [activePage]);
 
   // ==================== RENDER HELPERS ====================
 
@@ -890,13 +948,102 @@ function App() {
     );
   };
 
+  const renderPythonSetup = () => {
+    if (pythonChecking) {
+      return (
+        <div className="card">
+          <div className="card-title" style={{ marginBottom: 8 }}>Checking Python Environment...</div>
+          <p style={{ fontSize: 13, color: "var(--text-muted)" }}>Detecting Python installation and dependencies.</p>
+        </div>
+      );
+    }
+
+    if (!pythonEnv || pythonEnv.ready) return null;
+
+    return (
+      <div className="card" style={{ borderLeft: "4px solid var(--warning)" }}>
+        <div className="card-title" style={{ marginBottom: 8 }}>Python Setup Required</div>
+        <p style={{ fontSize: 13, color: "var(--text-secondary)", marginBottom: 12 }}>
+          Song analysis requires Python with audio processing libraries. {pythonEnv.python_found
+            ? `Python ${pythonEnv.python_version} detected.`
+            : "Python was not found on this computer."}
+        </p>
+
+        {!pythonEnv.python_found ? (
+          <div style={{ background: "var(--warning-light)", borderRadius: "var(--radius-sm)", padding: "12px 16px", marginBottom: 12 }}>
+            <p style={{ fontSize: 13, fontWeight: 600, color: "var(--warning)", marginBottom: 4 }}>Python not installed</p>
+            <p style={{ fontSize: 12, color: "var(--text-secondary)" }}>
+              Please install Python 3.10 or later from{" "}
+              <strong>python.org</strong>, then restart MyPitch.
+              Make sure to check "Add Python to PATH" during installation.
+            </p>
+          </div>
+        ) : (
+          <>
+            {pythonEnv.missing_deps.length > 0 && (
+              <div style={{ marginBottom: 12 }}>
+                <p style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", marginBottom: 6 }}>Missing dependencies:</p>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  {pythonEnv.missing_deps.map((dep) => (
+                    <span key={dep} style={{
+                      padding: "3px 10px", borderRadius: 999, fontSize: 12, fontWeight: 600,
+                      background: "var(--danger-light)", color: "var(--danger)",
+                    }}>{dep}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+            <button
+              className="btn btn-primary"
+              onClick={setupPythonEnv}
+              disabled={pythonSetupBusy}
+              style={{ width: "100%" }}
+            >
+              {pythonSetupBusy ? "Setting up..." : "Install Dependencies Automatically"}
+            </button>
+            <p style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 6, textAlign: "center" }}>
+              This will create a virtual environment and install librosa, numpy, and soundfile.
+            </p>
+          </>
+        )}
+
+        {pythonSetupLogs.length > 0 && (
+          <div style={{ marginTop: 12, padding: "10px 12px", background: "var(--surface-alt)", borderRadius: "var(--radius-sm)", border: "1px solid var(--border)" }}>
+            {pythonSetupLogs.map((log, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8, padding: "4px 0", fontSize: 12 }}>
+                <span style={{ flexShrink: 0 }}>{log.success ? "\u2705" : "\u274c"}</span>
+                <span style={{ color: log.success ? "var(--success)" : "var(--danger)" }}>{log.message}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <button
+          className="btn btn-secondary btn-sm"
+          onClick={checkPythonEnv}
+          disabled={pythonChecking}
+          style={{ marginTop: 8, width: "100%" }}
+        >
+          Re-check Environment
+        </button>
+      </div>
+    );
+  };
+
   const renderSongLibrary = () => (
     <>
+      {renderPythonSetup()}
+
       <div className="card">
-        <div className="drop-zone" onClick={importBusy ? undefined : importAudioFiles}>
+        <div className="drop-zone" onClick={importBusy || (pythonEnv && !pythonEnv.ready) ? undefined : importAudioFiles}
+          style={(pythonEnv && !pythonEnv.ready) ? { opacity: 0.5, cursor: "not-allowed" } : {}}>
           <div className="drop-icon"><UploadIcon /></div>
           <h3>{importBusy ? "Analyzing..." : "Drop audio files here"}</h3>
-          <p>{importBusy ? `Processing ${importFileCount} file(s)` : "or click to browse \u00b7 Supports MP3, WAV"}</p>
+          <p>{importBusy
+            ? `Processing ${importFileCount} file(s)`
+            : (pythonEnv && !pythonEnv.ready)
+              ? "Set up Python above to enable song import"
+              : "or click to browse \u00b7 Supports MP3, WAV"}</p>
         </div>
       </div>
 
@@ -923,6 +1070,18 @@ function App() {
               ))}
             </div>
           )}
+        </div>
+      )}
+
+      {pythonEnv?.ready && (
+        <div className="card" style={{ borderLeft: "4px solid var(--success)" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 16 }}>{"\u2705"}</span>
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 600 }}>Python environment ready</div>
+              <div style={{ fontSize: 11, color: "var(--text-muted)" }}>{pythonEnv.python_version} &bull; All dependencies installed</div>
+            </div>
+          </div>
         </div>
       )}
     </>

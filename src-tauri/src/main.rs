@@ -579,6 +579,281 @@ fn pick_audio_files(app: tauri::AppHandle) -> Result<Vec<String>, String> {
     Ok(out)
 }
 
+// ==================== PYTHON ENV DETECTION & SETUP ====================
+
+#[derive(Serialize)]
+struct PythonEnvStatus {
+    python_found: bool,
+    python_version: String,
+    python_path: String,
+    venv_exists: bool,
+    deps_installed: bool,
+    missing_deps: Vec<String>,
+    ready: bool,
+}
+
+/// Try running a python command and return (version_string, executable_path)
+fn try_python(cmd: &str, args: &[&str]) -> Option<(String, String)> {
+    let mut c = Command::new(cmd);
+    c.args(args).arg("--version");
+    if let Ok(output) = c.output() {
+        if output.status.success() {
+            let ver = String::from_utf8_lossy(&output.stdout).trim().to_string();
+            // Resolve full path
+            let mut which = Command::new(if cfg!(windows) { "where" } else { "which" });
+            which.arg(cmd);
+            let path = if let Ok(w) = which.output() {
+                String::from_utf8_lossy(&w.stdout).lines().next().unwrap_or(cmd).trim().to_string()
+            } else {
+                cmd.to_string()
+            };
+            return Some((ver, path));
+        }
+    }
+    None
+}
+
+#[tauri::command]
+fn check_python_env() -> PythonEnvStatus {
+    let root = project_root();
+    let venv_dir = root.join("tools").join("audio_analyzer").join(".venv");
+    let venv_python = venv_dir.join("Scripts").join("python.exe");
+    let venv_exists = venv_python.exists();
+
+    // 1. Find a working python
+    let (py_found, py_ver, py_path) = if venv_exists {
+        let ver = Command::new(&venv_python)
+            .arg("--version")
+            .output()
+            .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_string())
+            .unwrap_or_default();
+        (true, ver, venv_python.to_string_lossy().to_string())
+    } else {
+        // Try system python in order of preference
+        try_python("python", &[])
+            .or_else(|| try_python("python3", &[]))
+            .or_else(|| try_python("py", &["-3"]))
+            .map(|(v, p)| (true, v, p))
+            .unwrap_or((false, String::new(), String::new()))
+    };
+
+    if !py_found {
+        return PythonEnvStatus {
+            python_found: false,
+            python_version: String::new(),
+            python_path: String::new(),
+            venv_exists: false,
+            deps_installed: false,
+            missing_deps: vec!["librosa".into(), "numpy".into(), "soundfile".into()],
+            ready: false,
+        };
+    }
+
+    // 2. Check which deps are installed
+    let check_python = if venv_exists {
+        venv_python.to_string_lossy().to_string()
+    } else {
+        py_path.clone()
+    };
+
+    let required = ["librosa", "numpy", "soundfile"];
+    let mut missing = Vec::new();
+    for dep in &required {
+        let ok = Command::new(&check_python)
+            .args(["-c", &format!("import {dep}")])
+            .output()
+            .map(|o| o.status.success())
+            .unwrap_or(false);
+        if !ok {
+            missing.push(dep.to_string());
+        }
+    }
+
+    let deps_ok = missing.is_empty();
+    let script_exists = root.join("tools").join("audio_analyzer").join("analyze.py").exists();
+
+    PythonEnvStatus {
+        python_found: true,
+        python_version: py_ver,
+        python_path: py_path,
+        venv_exists,
+        deps_installed: deps_ok,
+        missing_deps: missing,
+        ready: deps_ok && script_exists,
+    }
+}
+
+#[derive(Serialize)]
+struct SetupProgress {
+    step: String,
+    success: bool,
+    message: String,
+}
+
+#[tauri::command]
+fn setup_python_env() -> Vec<SetupProgress> {
+    let mut progress = Vec::new();
+    let root = project_root();
+    let analyzer_dir = root.join("tools").join("audio_analyzer");
+    let venv_dir = analyzer_dir.join(".venv");
+    let venv_python = venv_dir.join("Scripts").join("python.exe");
+    let requirements = analyzer_dir.join("requirements.txt");
+
+    // 1. Find system python
+    let system_python = try_python("python", &[])
+        .or_else(|| try_python("python3", &[]))
+        .or_else(|| try_python("py", &["-3"]));
+
+    let (py_ver, py_cmd) = match system_python {
+        Some((ver, path)) => {
+            progress.push(SetupProgress {
+                step: "detect_python".into(),
+                success: true,
+                message: format!("Found {ver} at {path}"),
+            });
+            (ver, path)
+        }
+        None => {
+            progress.push(SetupProgress {
+                step: "detect_python".into(),
+                success: false,
+                message: "Python not found. Please install Python 3.10+ from python.org and restart MyPitch.".into(),
+            });
+            return progress;
+        }
+    };
+
+    // Check version is >= 3.10
+    let ver_parts: Vec<u32> = py_ver
+        .replace("Python ", "")
+        .split('.')
+        .filter_map(|s| s.parse().ok())
+        .collect();
+    if ver_parts.len() >= 2 && (ver_parts[0] < 3 || (ver_parts[0] == 3 && ver_parts[1] < 10)) {
+        progress.push(SetupProgress {
+            step: "check_version".into(),
+            success: false,
+            message: format!("Python 3.10+ required but found {py_ver}. Please upgrade from python.org."),
+        });
+        return progress;
+    }
+
+    // 2. Create venv if not exists
+    if !venv_python.exists() {
+        let output = Command::new(&py_cmd)
+            .args(["-m", "venv"])
+            .arg(&venv_dir)
+            .output();
+        match output {
+            Ok(o) if o.status.success() => {
+                progress.push(SetupProgress {
+                    step: "create_venv".into(),
+                    success: true,
+                    message: "Created virtual environment".into(),
+                });
+            }
+            Ok(o) => {
+                let err = String::from_utf8_lossy(&o.stderr);
+                progress.push(SetupProgress {
+                    step: "create_venv".into(),
+                    success: false,
+                    message: format!("Failed to create venv: {err}"),
+                });
+                return progress;
+            }
+            Err(e) => {
+                progress.push(SetupProgress {
+                    step: "create_venv".into(),
+                    success: false,
+                    message: format!("Failed to run python: {e}"),
+                });
+                return progress;
+            }
+        }
+    } else {
+        progress.push(SetupProgress {
+            step: "create_venv".into(),
+            success: true,
+            message: "Virtual environment already exists".into(),
+        });
+    }
+
+    // 3. Install requirements
+    let pip_args = if requirements.exists() {
+        vec![
+            "-m".to_string(),
+            "pip".to_string(),
+            "install".to_string(),
+            "-r".to_string(),
+            requirements.to_string_lossy().to_string(),
+        ]
+    } else {
+        // Fall back to inline deps
+        vec![
+            "-m".to_string(),
+            "pip".to_string(),
+            "install".to_string(),
+            "numpy==1.26.4".to_string(),
+            "librosa==0.10.2.post1".to_string(),
+            "soundfile==0.12.1".to_string(),
+        ]
+    };
+
+    let output = Command::new(&venv_python)
+        .args(&pip_args)
+        .output();
+
+    match output {
+        Ok(o) if o.status.success() => {
+            progress.push(SetupProgress {
+                step: "install_deps".into(),
+                success: true,
+                message: "Installed librosa, numpy, soundfile".into(),
+            });
+        }
+        Ok(o) => {
+            let err = String::from_utf8_lossy(&o.stderr);
+            progress.push(SetupProgress {
+                step: "install_deps".into(),
+                success: false,
+                message: format!("pip install failed: {err}"),
+            });
+            return progress;
+        }
+        Err(e) => {
+            progress.push(SetupProgress {
+                step: "install_deps".into(),
+                success: false,
+                message: format!("Failed to run pip: {e}"),
+            });
+            return progress;
+        }
+    }
+
+    // 4. Verify everything works
+    let verify = Command::new(&venv_python)
+        .args(["-c", "import librosa; import numpy; import soundfile; print('OK')"])
+        .output();
+    match verify {
+        Ok(o) if o.status.success() => {
+            progress.push(SetupProgress {
+                step: "verify".into(),
+                success: true,
+                message: "All dependencies verified successfully".into(),
+            });
+        }
+        _ => {
+            progress.push(SetupProgress {
+                step: "verify".into(),
+                success: false,
+                message: "Verification failed — some imports still missing".into(),
+            });
+        }
+    }
+
+    progress
+}
+
 fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
@@ -592,7 +867,9 @@ fn main() {
             recommend_songs,
             recommend_imported_songs,
             import_and_analyze_songs,
-            pick_audio_files
+            pick_audio_files,
+            check_python_env,
+            setup_python_env
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
