@@ -607,6 +607,8 @@ struct PythonEnvStatus {
     venv_exists: bool,
     deps_installed: bool,
     missing_deps: Vec<String>,
+    script_found: bool,
+    script_path: String,
     ready: bool,
 }
 
@@ -655,6 +657,10 @@ fn check_python_env() -> PythonEnvStatus {
             .unwrap_or((false, String::new(), String::new()))
     };
 
+    let script_path = root.join("tools").join("audio_analyzer").join("analyze.py");
+    let script_exists = script_path.exists();
+    let script_path_str = script_path.to_string_lossy().to_string();
+
     if !py_found {
         return PythonEnvStatus {
             python_found: false,
@@ -663,6 +669,8 @@ fn check_python_env() -> PythonEnvStatus {
             venv_exists: false,
             deps_installed: false,
             missing_deps: vec!["librosa".into(), "numpy".into(), "soundfile".into()],
+            script_found: script_exists,
+            script_path: script_path_str,
             ready: false,
         };
     }
@@ -688,7 +696,6 @@ fn check_python_env() -> PythonEnvStatus {
     }
 
     let deps_ok = missing.is_empty();
-    let script_exists = root.join("tools").join("audio_analyzer").join("analyze.py").exists();
 
     PythonEnvStatus {
         python_found: true,
@@ -697,7 +704,12 @@ fn check_python_env() -> PythonEnvStatus {
         venv_exists,
         deps_installed: deps_ok,
         missing_deps: missing,
-        ready: deps_ok && script_exists,
+        script_found: script_exists,
+        script_path: script_path_str,
+        // Ready = python + deps installed. Script is bundled and should always
+        // be there, but don't block the UI if the path check fails — the import
+        // command will give a clear error message instead.
+        ready: py_found && deps_ok,
     }
 }
 

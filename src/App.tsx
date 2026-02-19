@@ -71,6 +71,8 @@ type PythonEnvStatus = {
   venv_exists: boolean;
   deps_installed: boolean;
   missing_deps: string[];
+  script_found: boolean;
+  script_path: string;
   ready: boolean;
 };
 
@@ -633,7 +635,8 @@ function App() {
       setPythonEnv({
         python_found: false, python_version: "", python_path: "",
         venv_exists: false, deps_installed: false,
-        missing_deps: ["librosa", "numpy", "soundfile"], ready: false,
+        missing_deps: ["librosa", "numpy", "soundfile"],
+        script_found: false, script_path: "", ready: false,
       });
     } finally {
       setPythonChecking(false);
@@ -1080,6 +1083,11 @@ function App() {
             <div>
               <div style={{ fontSize: 13, fontWeight: 600 }}>Python environment ready</div>
               <div style={{ fontSize: 11, color: "var(--text-muted)" }}>{pythonEnv.python_version} &bull; All dependencies installed</div>
+              {!pythonEnv.script_found && (
+                <div style={{ fontSize: 11, color: "var(--warning)", marginTop: 2 }}>
+                  Analyzer script not found at: {pythonEnv.script_path}
+                </div>
+              )}
             </div>
           </div>
         </div>
